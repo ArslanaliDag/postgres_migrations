@@ -39,7 +39,7 @@ namespace PostgresMigrations
             Directory.CreateDirectory(SchemasPath);
 
             // Initialize UI defaults
-            comboSchema.Items.AddRange(new object[] { "public", "users", "policy", "migrations", "custom" });
+            comboSchema.Items.AddRange(new object[] { "policyregistry", "users_schema", "public", "custom" });
             comboSchema.SelectedIndex = 0;
 
             comboType.Items.AddRange(new object[] {
