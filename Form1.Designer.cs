@@ -386,7 +386,7 @@ namespace PostgresMigrations
             this.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Database Migration Creator v2.0";
+            this.Text = "Database Migration Creator v1.0";
             this.buttonPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
