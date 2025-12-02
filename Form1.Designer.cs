@@ -51,214 +51,329 @@ namespace PostgresMigrations
 
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-
-            // Form properties
-            this.Text = "Database Migration Creator v2.0";
-            this.Width = 1000;
-            this.Height = 820;
-            this.StartPosition = FormStartPosition.CenterScreen;
-            this.Font = new System.Drawing.Font("Segoe UI", 10);
+            this.titleLabel = new System.Windows.Forms.Label();
+            this.separator1 = new System.Windows.Forms.Label();
+            this.labelSchema = new System.Windows.Forms.Label();
+            this.comboSchema = new System.Windows.Forms.ComboBox();
+            this.labelCustomSchema = new System.Windows.Forms.Label();
+            this.txtCustomSchema = new System.Windows.Forms.TextBox();
+            this.section2Label = new System.Windows.Forms.Label();
+            this.labelName = new System.Windows.Forms.Label();
+            this.txtName = new System.Windows.Forms.TextBox();
+            this.nameHint = new System.Windows.Forms.Label();
+            this.labelAuthor = new System.Windows.Forms.Label();
+            this.txtAuthor = new System.Windows.Forms.TextBox();
+            this.labelComment = new System.Windows.Forms.Label();
+            this.txtComment = new System.Windows.Forms.TextBox();
+            this.section3Label = new System.Windows.Forms.Label();
+            this.comboType = new System.Windows.Forms.ComboBox();
+            this.section4Label = new System.Windows.Forms.Label();
+            this.txtSql = new System.Windows.Forms.TextBox();
+            this.btnInsertTemplate = new System.Windows.Forms.Button();
+            this.buttonPanel = new System.Windows.Forms.Panel();
+            this.btnGenerateInit = new System.Windows.Forms.Button();
+            this.btnCreate = new System.Windows.Forms.Button();
+            this.btnPreview = new System.Windows.Forms.Button();
+            this.btnClear = new System.Windows.Forms.Button();
+            this.btnExit = new System.Windows.Forms.Button();
+            this.buttonPanel.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // titleLabel
+            // 
+            this.titleLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.titleLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.titleLabel.ForeColor = System.Drawing.Color.DarkBlue;
+            this.titleLabel.Location = new System.Drawing.Point(20, 12);
+            this.titleLabel.Name = "titleLabel";
+            this.titleLabel.Size = new System.Drawing.Size(940, 30);
+            this.titleLabel.TabIndex = 0;
+            this.titleLabel.Text = "CREATE DATABASE MIGRATION";
+            // 
+            // separator1
+            // 
+            this.separator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.separator1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.separator1.Location = new System.Drawing.Point(20, 50);
+            this.separator1.Name = "separator1";
+            this.separator1.Size = new System.Drawing.Size(940, 2);
+            this.separator1.TabIndex = 1;
+            // 
+            // labelSchema
+            // 
+            this.labelSchema.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.labelSchema.Location = new System.Drawing.Point(20, 70);
+            this.labelSchema.Name = "labelSchema";
+            this.labelSchema.Size = new System.Drawing.Size(200, 25);
+            this.labelSchema.TabIndex = 2;
+            this.labelSchema.Text = "Target Schema:";
+            // 
+            // comboSchema
+            // 
+            this.comboSchema.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboSchema.Location = new System.Drawing.Point(220, 70);
+            this.comboSchema.Name = "comboSchema";
+            this.comboSchema.Size = new System.Drawing.Size(200, 25);
+            this.comboSchema.TabIndex = 3;
+            this.comboSchema.SelectedIndexChanged += new System.EventHandler(this.comboSchema_SelectedIndexChanged);
+            // 
+            // labelCustomSchema
+            // 
+            this.labelCustomSchema.Location = new System.Drawing.Point(430, 70);
+            this.labelCustomSchema.Name = "labelCustomSchema";
+            this.labelCustomSchema.Size = new System.Drawing.Size(100, 25);
+            this.labelCustomSchema.TabIndex = 4;
+            this.labelCustomSchema.Text = "Custom schema:";
+            this.labelCustomSchema.Visible = false;
+            // 
+            // txtCustomSchema
+            // 
+            this.txtCustomSchema.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtCustomSchema.Location = new System.Drawing.Point(540, 70);
+            this.txtCustomSchema.Name = "txtCustomSchema";
+            this.txtCustomSchema.Size = new System.Drawing.Size(150, 25);
+            this.txtCustomSchema.TabIndex = 5;
+            this.txtCustomSchema.Visible = false;
+            // 
+            // section2Label
+            // 
+            this.section2Label.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.section2Label.Location = new System.Drawing.Point(20, 110);
+            this.section2Label.Name = "section2Label";
+            this.section2Label.Size = new System.Drawing.Size(300, 25);
+            this.section2Label.TabIndex = 6;
+            this.section2Label.Text = "2. Migration Description";
+            // 
+            // labelName
+            // 
+            this.labelName.Location = new System.Drawing.Point(40, 145);
+            this.labelName.Name = "labelName";
+            this.labelName.Size = new System.Drawing.Size(150, 25);
+            this.labelName.TabIndex = 7;
+            this.labelName.Text = "Migration Name:";
+            // 
+            // txtName
+            // 
+            this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtName.Font = new System.Drawing.Font("Consolas", 10F);
+            this.txtName.Location = new System.Drawing.Point(200, 145);
+            this.txtName.Name = "txtName";
+            this.txtName.Size = new System.Drawing.Size(400, 23);
+            this.txtName.TabIndex = 8;
+            // 
+            // nameHint
+            // 
+            this.nameHint.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.nameHint.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.nameHint.ForeColor = System.Drawing.Color.Gray;
+            this.nameHint.Location = new System.Drawing.Point(610, 145);
+            this.nameHint.Name = "nameHint";
+            this.nameHint.Size = new System.Drawing.Size(300, 25);
+            this.nameHint.TabIndex = 9;
+            this.nameHint.Text = "English letters and underscores only";
+            // 
+            // labelAuthor
+            // 
+            this.labelAuthor.Location = new System.Drawing.Point(40, 185);
+            this.labelAuthor.Name = "labelAuthor";
+            this.labelAuthor.Size = new System.Drawing.Size(150, 25);
+            this.labelAuthor.TabIndex = 10;
+            this.labelAuthor.Text = "Author:";
+            // 
+            // txtAuthor
+            // 
+            this.txtAuthor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtAuthor.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtAuthor.Location = new System.Drawing.Point(200, 185);
+            this.txtAuthor.Name = "txtAuthor";
+            this.txtAuthor.Size = new System.Drawing.Size(400, 25);
+            this.txtAuthor.TabIndex = 11;
+            // 
+            // labelComment
+            // 
+            this.labelComment.Location = new System.Drawing.Point(40, 225);
+            this.labelComment.Name = "labelComment";
+            this.labelComment.Size = new System.Drawing.Size(150, 25);
+            this.labelComment.TabIndex = 12;
+            this.labelComment.Text = "Comment (notes):";
+            // 
+            // txtComment
+            // 
+            this.txtComment.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtComment.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtComment.Location = new System.Drawing.Point(200, 225);
+            this.txtComment.Name = "txtComment";
+            this.txtComment.Size = new System.Drawing.Size(650, 25);
+            this.txtComment.TabIndex = 13;
+            // 
+            // section3Label
+            // 
+            this.section3Label.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.section3Label.Location = new System.Drawing.Point(20, 265);
+            this.section3Label.Name = "section3Label";
+            this.section3Label.Size = new System.Drawing.Size(300, 25);
+            this.section3Label.TabIndex = 14;
+            this.section3Label.Text = "3. Migration Type";
+            // 
+            // comboType
+            // 
+            this.comboType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboType.Location = new System.Drawing.Point(40, 300);
+            this.comboType.Name = "comboType";
+            this.comboType.Size = new System.Drawing.Size(800, 25);
+            this.comboType.TabIndex = 15;
+            // 
+            // section4Label
+            // 
+            this.section4Label.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.section4Label.Location = new System.Drawing.Point(20, 340);
+            this.section4Label.Name = "section4Label";
+            this.section4Label.Size = new System.Drawing.Size(300, 25);
+            this.section4Label.TabIndex = 16;
+            this.section4Label.Text = "4. SQL Migration Code";
+            // 
+            // txtSql
+            // 
+            this.txtSql.AcceptsTab = true;
+            this.txtSql.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSql.Location = new System.Drawing.Point(40, 375);
+            this.txtSql.Multiline = true;
+            this.txtSql.Name = "txtSql";
+            this.txtSql.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtSql.Size = new System.Drawing.Size(910, 200);
+            this.txtSql.TabIndex = 17;
+            // 
+            // btnInsertTemplate
+            // 
+            this.btnInsertTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnInsertTemplate.BackColor = System.Drawing.Color.LightGray;
+            this.btnInsertTemplate.Location = new System.Drawing.Point(40, 585);
+            this.btnInsertTemplate.Name = "btnInsertTemplate";
+            this.btnInsertTemplate.Size = new System.Drawing.Size(150, 30);
+            this.btnInsertTemplate.TabIndex = 18;
+            this.btnInsertTemplate.Text = "Insert Template";
+            this.btnInsertTemplate.UseVisualStyleBackColor = false;
+            this.btnInsertTemplate.Click += new System.EventHandler(this.btnInsertTemplate_Click);
+            // 
+            // buttonPanel
+            // 
+            this.buttonPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonPanel.Controls.Add(this.btnGenerateInit);
+            this.buttonPanel.Controls.Add(this.btnCreate);
+            this.buttonPanel.Controls.Add(this.btnPreview);
+            this.buttonPanel.Controls.Add(this.btnClear);
+            this.buttonPanel.Controls.Add(this.btnExit);
+            this.buttonPanel.Location = new System.Drawing.Point(20, 630);
+            this.buttonPanel.Name = "buttonPanel";
+            this.buttonPanel.Size = new System.Drawing.Size(930, 60);
+            this.buttonPanel.TabIndex = 19;
+            // 
+            // btnGenerateInit
+            // 
+            this.btnGenerateInit.BackColor = System.Drawing.Color.DarkOrange;
+            this.btnGenerateInit.ForeColor = System.Drawing.Color.White;
+            this.btnGenerateInit.Location = new System.Drawing.Point(481, 10);
+            this.btnGenerateInit.Name = "btnGenerateInit";
+            this.btnGenerateInit.Size = new System.Drawing.Size(150, 40);
+            this.btnGenerateInit.TabIndex = 0;
+            this.btnGenerateInit.Text = "Generate Init Script";
+            this.btnGenerateInit.UseVisualStyleBackColor = false;
+            this.btnGenerateInit.Click += new System.EventHandler(this.btnGenerateInit_Click);
+            // 
+            // btnCreate
+            // 
+            this.btnCreate.BackColor = System.Drawing.Color.ForestGreen;
+            this.btnCreate.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnCreate.ForeColor = System.Drawing.Color.White;
+            this.btnCreate.Location = new System.Drawing.Point(0, 10);
+            this.btnCreate.Name = "btnCreate";
+            this.btnCreate.Size = new System.Drawing.Size(150, 40);
+            this.btnCreate.TabIndex = 0;
+            this.btnCreate.Text = "Create Migration";
+            this.btnCreate.UseVisualStyleBackColor = false;
+            this.btnCreate.Click += new System.EventHandler(this.btnCreate_Click);
+            // 
+            // btnPreview
+            // 
+            this.btnPreview.BackColor = System.Drawing.Color.SteelBlue;
+            this.btnPreview.ForeColor = System.Drawing.Color.White;
+            this.btnPreview.Location = new System.Drawing.Point(160, 10);
+            this.btnPreview.Name = "btnPreview";
+            this.btnPreview.Size = new System.Drawing.Size(150, 40);
+            this.btnPreview.TabIndex = 1;
+            this.btnPreview.Text = "Preview";
+            this.btnPreview.UseVisualStyleBackColor = false;
+            this.btnPreview.Click += new System.EventHandler(this.btnPreview_Click);
+            // 
+            // btnClear
+            // 
+            this.btnClear.BackColor = System.Drawing.Color.OrangeRed;
+            this.btnClear.ForeColor = System.Drawing.Color.White;
+            this.btnClear.Location = new System.Drawing.Point(320, 10);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(150, 40);
+            this.btnClear.TabIndex = 2;
+            this.btnClear.Text = "Clear";
+            this.btnClear.UseVisualStyleBackColor = false;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
+            // btnExit
+            // 
+            this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExit.BackColor = System.Drawing.Color.DarkRed;
+            this.btnExit.ForeColor = System.Drawing.Color.White;
+            this.btnExit.Location = new System.Drawing.Point(780, 10);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(150, 40);
+            this.btnExit.TabIndex = 3;
+            this.btnExit.Text = "Exit";
+            this.btnExit.UseVisualStyleBackColor = false;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            // 
+            // Form1
+            // 
             this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(984, 781);
+            this.Controls.Add(this.titleLabel);
+            this.Controls.Add(this.separator1);
+            this.Controls.Add(this.labelSchema);
+            this.Controls.Add(this.comboSchema);
+            this.Controls.Add(this.labelCustomSchema);
+            this.Controls.Add(this.txtCustomSchema);
+            this.Controls.Add(this.section2Label);
+            this.Controls.Add(this.labelName);
+            this.Controls.Add(this.txtName);
+            this.Controls.Add(this.nameHint);
+            this.Controls.Add(this.labelAuthor);
+            this.Controls.Add(this.txtAuthor);
+            this.Controls.Add(this.labelComment);
+            this.Controls.Add(this.txtComment);
+            this.Controls.Add(this.section3Label);
+            this.Controls.Add(this.comboType);
+            this.Controls.Add(this.section4Label);
+            this.Controls.Add(this.txtSql);
+            this.Controls.Add(this.btnInsertTemplate);
+            this.Controls.Add(this.buttonPanel);
+            this.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Database Migration Creator v2.0";
+            this.buttonPanel.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-            // Title
-            titleLabel = new Label();
-            titleLabel.Location = new System.Drawing.Point(20, 12);
-            titleLabel.Size = new System.Drawing.Size(940, 30);
-            titleLabel.Text = "CREATE DATABASE MIGRATION (Multi-Schema Support)";
-            titleLabel.Font = new System.Drawing.Font("Segoe UI", 12, System.Drawing.FontStyle.Bold);
-            titleLabel.ForeColor = System.Drawing.Color.DarkBlue;
-            titleLabel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            this.Controls.Add(titleLabel);
-
-            // Separator
-            separator1 = new Label();
-            separator1.Location = new System.Drawing.Point(20, 50);
-            separator1.Size = new System.Drawing.Size(940, 2);
-            separator1.BorderStyle = BorderStyle.FixedSingle;
-            separator1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            this.Controls.Add(separator1);
-
-            // SECTION 1: Schema
-            labelSchema = new Label();
-            labelSchema.Location = new System.Drawing.Point(20, 70);
-            labelSchema.Size = new System.Drawing.Size(200, 25);
-            labelSchema.Text = "Target Schema:";
-            labelSchema.Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold);
-            labelSchema.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-            this.Controls.Add(labelSchema);
-
-            comboSchema = new ComboBox();
-            comboSchema.Location = new System.Drawing.Point(220, 70);
-            comboSchema.Size = new System.Drawing.Size(200, 25);
-            comboSchema.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboSchema.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-            comboSchema.SelectedIndexChanged += comboSchema_SelectedIndexChanged;
-            this.Controls.Add(comboSchema);
-
-            labelCustomSchema = new Label();
-            labelCustomSchema.Location = new System.Drawing.Point(430, 70);
-            labelCustomSchema.Size = new System.Drawing.Size(100, 25);
-            labelCustomSchema.Text = "Custom schema:";
-            labelCustomSchema.Visible = false;
-            labelCustomSchema.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-            this.Controls.Add(labelCustomSchema);
-
-            txtCustomSchema = new TextBox();
-            txtCustomSchema.Location = new System.Drawing.Point(540, 70);
-            txtCustomSchema.Size = new System.Drawing.Size(150, 25);
-            txtCustomSchema.Visible = false;
-            txtCustomSchema.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            this.Controls.Add(txtCustomSchema);
-
-            // SECTION 2: Migration info
-            section2Label = new Label();
-            section2Label.Location = new System.Drawing.Point(20, 110);
-            section2Label.Size = new System.Drawing.Size(300, 25);
-            section2Label.Text = "2. Migration Description";
-            section2Label.Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold);
-            section2Label.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-            this.Controls.Add(section2Label);
-
-            labelName = new Label();
-            labelName.Location = new System.Drawing.Point(40, 145);
-            labelName.Size = new System.Drawing.Size(150, 25);
-            labelName.Text = "Migration Name:";
-            labelName.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-            this.Controls.Add(labelName);
-
-            txtName = new TextBox();
-            txtName.Location = new System.Drawing.Point(200, 145);
-            txtName.Size = new System.Drawing.Size(400, 25);
-            txtName.Font = new System.Drawing.Font("Consolas", 10);
-            txtName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            this.Controls.Add(txtName);
-
-            nameHint = new Label();
-            nameHint.Location = new System.Drawing.Point(610, 145);
-            nameHint.Size = new System.Drawing.Size(300, 25);
-            nameHint.Text = "English letters and underscores only";
-            nameHint.ForeColor = System.Drawing.Color.Gray;
-            nameHint.Font = new System.Drawing.Font("Segoe UI", 9);
-            nameHint.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            this.Controls.Add(nameHint);
-
-            labelAuthor = new Label();
-            labelAuthor.Location = new System.Drawing.Point(40, 185);
-            labelAuthor.Size = new System.Drawing.Size(150, 25);
-            labelAuthor.Text = "Author:";
-            labelAuthor.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-            this.Controls.Add(labelAuthor);
-
-            txtAuthor = new TextBox();
-            txtAuthor.Location = new System.Drawing.Point(200, 185);
-            txtAuthor.Size = new System.Drawing.Size(400, 25);
-            txtAuthor.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtAuthor.Font = new System.Drawing.Font("Segoe UI", 10);
-            this.Controls.Add(txtAuthor);
-
-            labelComment = new Label();
-            labelComment.Location = new System.Drawing.Point(40, 225);
-            labelComment.Size = new System.Drawing.Size(150, 25);
-            labelComment.Text = "Comment (notes):";
-            labelComment.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-            this.Controls.Add(labelComment);
-
-            txtComment = new TextBox();
-            txtComment.Location = new System.Drawing.Point(200, 225);
-            txtComment.Size = new System.Drawing.Size(650, 25);
-            txtComment.Font = new System.Drawing.Font("Segoe UI", 10);
-            txtComment.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            this.Controls.Add(txtComment);
-
-            // SECTION 3: Migration Type
-            section3Label = new Label();
-            section3Label.Location = new System.Drawing.Point(20, 265);
-            section3Label.Size = new System.Drawing.Size(300, 25);
-            section3Label.Text = "3. Migration Type";
-            section3Label.Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold);
-            section3Label.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-            this.Controls.Add(section3Label);
-
-            comboType = new ComboBox();
-            comboType.Location = new System.Drawing.Point(40, 300);
-            comboType.Size = new System.Drawing.Size(800, 30);
-            comboType.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboType.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            this.Controls.Add(comboType);
-
-            // SECTION 4: SQL
-            section4Label = new Label();
-            section4Label.Location = new System.Drawing.Point(20, 340);
-            section4Label.Size = new System.Drawing.Size(300, 25);
-            section4Label.Text = "4. SQL Migration Code";
-            section4Label.Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold);
-            section4Label.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-            this.Controls.Add(section4Label);
-
-            txtSql = new TextBox();
-            txtSql.Location = new System.Drawing.Point(40, 375);
-            txtSql.Size = new System.Drawing.Size(910, 200);
-            txtSql.Multiline = true;
-            txtSql.ScrollBars = ScrollBars.Both;
-            txtSql.AcceptsTab = true;
-            txtSql.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            this.Controls.Add(txtSql);
-
-            // Insert Template button
-            btnInsertTemplate = new Button();
-            btnInsertTemplate.Location = new System.Drawing.Point(40, 585);
-            btnInsertTemplate.Size = new System.Drawing.Size(150, 30);
-            btnInsertTemplate.Text = "Insert Template";
-            btnInsertTemplate.BackColor = System.Drawing.Color.LightGray;
-            btnInsertTemplate.Anchor = AnchorStyles.Left | AnchorStyles.Bottom;
-            btnInsertTemplate.Click += btnInsertTemplate_Click;
-            this.Controls.Add(btnInsertTemplate);
-
-            // Buttons panel (bottom)
-            buttonPanel = new Panel();
-            buttonPanel.Location = new System.Drawing.Point(20, 630);
-            buttonPanel.Size = new System.Drawing.Size(930, 60);
-            buttonPanel.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-            this.Controls.Add(buttonPanel);
-
-            btnCreate = new Button();
-            btnCreate.Location = new System.Drawing.Point(0, 10);
-            btnCreate.Size = new System.Drawing.Size(150, 40);
-            btnCreate.Text = "Create Migration";
-            btnCreate.Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold);
-            btnCreate.BackColor = System.Drawing.Color.ForestGreen;
-            btnCreate.ForeColor = System.Drawing.Color.White;
-            btnCreate.Click += btnCreate_Click;
-            buttonPanel.Controls.Add(btnCreate);
-
-            btnPreview = new Button();
-            btnPreview.Location = new System.Drawing.Point(160, 10);
-            btnPreview.Size = new System.Drawing.Size(150, 40);
-            btnPreview.Text = "Preview";
-            btnPreview.BackColor = System.Drawing.Color.SteelBlue;
-            btnPreview.ForeColor = System.Drawing.Color.White;
-            btnPreview.Click += btnPreview_Click;
-            buttonPanel.Controls.Add(btnPreview);
-
-            btnClear = new Button();
-            btnClear.Location = new System.Drawing.Point(320, 10);
-            btnClear.Size = new System.Drawing.Size(150, 40);
-            btnClear.Text = "Clear";
-            btnClear.BackColor = System.Drawing.Color.OrangeRed;
-            btnClear.ForeColor = System.Drawing.Color.White;
-            btnClear.Click += btnClear_Click;
-            buttonPanel.Controls.Add(btnClear);
-
-            btnExit = new Button();
-            btnExit.Location = new System.Drawing.Point(780, 10);
-            btnExit.Size = new System.Drawing.Size(150, 40);
-            btnExit.Text = "Exit";
-            btnExit.BackColor = System.Drawing.Color.DarkRed;
-            btnExit.ForeColor = System.Drawing.Color.White;
-            btnExit.Anchor = AnchorStyles.Right | AnchorStyles.Top;
-            btnExit.Click += btnExit_Click;
-            buttonPanel.Controls.Add(btnExit);
         }
     }
 }
