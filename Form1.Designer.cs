@@ -35,7 +35,6 @@ namespace PostgresMigrations
         private Button btnCreate;
         private Button btnPreview;
         private Button btnClear;
-        private Button btnExit;
 
         private Label labelLoadTemplate;
         private ComboBox comboTemplates;
@@ -75,7 +74,6 @@ namespace PostgresMigrations
             this.btnCreate = new System.Windows.Forms.Button();
             this.btnPreview = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
-            this.btnExit = new System.Windows.Forms.Button();
             this.buttonPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -251,14 +249,14 @@ namespace PostgresMigrations
             this.txtSql.Multiline = true;
             this.txtSql.Name = "txtSql";
             this.txtSql.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtSql.Size = new System.Drawing.Size(910, 200);
+            this.txtSql.Size = new System.Drawing.Size(910, 301);
             this.txtSql.TabIndex = 17;
             // 
             // btnInsertTemplate
             // 
             this.btnInsertTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnInsertTemplate.BackColor = System.Drawing.Color.LightGray;
-            this.btnInsertTemplate.Location = new System.Drawing.Point(40, 585);
+            this.btnInsertTemplate.Location = new System.Drawing.Point(40, 682);
             this.btnInsertTemplate.Name = "btnInsertTemplate";
             this.btnInsertTemplate.Size = new System.Drawing.Size(150, 30);
             this.btnInsertTemplate.TabIndex = 18;
@@ -268,23 +266,21 @@ namespace PostgresMigrations
             // 
             // buttonPanel
             // 
-            this.buttonPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonPanel.Controls.Add(this.btnGenerateInit);
             this.buttonPanel.Controls.Add(this.btnCreate);
             this.buttonPanel.Controls.Add(this.btnPreview);
             this.buttonPanel.Controls.Add(this.btnClear);
-            this.buttonPanel.Controls.Add(this.btnExit);
-            this.buttonPanel.Location = new System.Drawing.Point(20, 630);
+            this.buttonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonPanel.Location = new System.Drawing.Point(0, 722);
             this.buttonPanel.Name = "buttonPanel";
-            this.buttonPanel.Size = new System.Drawing.Size(930, 60);
+            this.buttonPanel.Size = new System.Drawing.Size(984, 67);
             this.buttonPanel.TabIndex = 19;
             // 
             // btnGenerateInit
             // 
             this.btnGenerateInit.BackColor = System.Drawing.Color.DarkOrange;
             this.btnGenerateInit.ForeColor = System.Drawing.Color.White;
-            this.btnGenerateInit.Location = new System.Drawing.Point(481, 10);
+            this.btnGenerateInit.Location = new System.Drawing.Point(521, 9);
             this.btnGenerateInit.Name = "btnGenerateInit";
             this.btnGenerateInit.Size = new System.Drawing.Size(150, 40);
             this.btnGenerateInit.TabIndex = 0;
@@ -297,7 +293,7 @@ namespace PostgresMigrations
             this.btnCreate.BackColor = System.Drawing.Color.ForestGreen;
             this.btnCreate.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnCreate.ForeColor = System.Drawing.Color.White;
-            this.btnCreate.Location = new System.Drawing.Point(0, 10);
+            this.btnCreate.Location = new System.Drawing.Point(40, 9);
             this.btnCreate.Name = "btnCreate";
             this.btnCreate.Size = new System.Drawing.Size(150, 40);
             this.btnCreate.TabIndex = 0;
@@ -309,7 +305,7 @@ namespace PostgresMigrations
             // 
             this.btnPreview.BackColor = System.Drawing.Color.SteelBlue;
             this.btnPreview.ForeColor = System.Drawing.Color.White;
-            this.btnPreview.Location = new System.Drawing.Point(160, 10);
+            this.btnPreview.Location = new System.Drawing.Point(200, 9);
             this.btnPreview.Name = "btnPreview";
             this.btnPreview.Size = new System.Drawing.Size(150, 40);
             this.btnPreview.TabIndex = 1;
@@ -321,7 +317,7 @@ namespace PostgresMigrations
             // 
             this.btnClear.BackColor = System.Drawing.Color.OrangeRed;
             this.btnClear.ForeColor = System.Drawing.Color.White;
-            this.btnClear.Location = new System.Drawing.Point(320, 10);
+            this.btnClear.Location = new System.Drawing.Point(360, 9);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(150, 40);
             this.btnClear.TabIndex = 2;
@@ -329,23 +325,10 @@ namespace PostgresMigrations
             this.btnClear.UseVisualStyleBackColor = false;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
-            // btnExit
-            // 
-            this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExit.BackColor = System.Drawing.Color.DarkRed;
-            this.btnExit.ForeColor = System.Drawing.Color.White;
-            this.btnExit.Location = new System.Drawing.Point(780, 10);
-            this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(150, 40);
-            this.btnExit.TabIndex = 3;
-            this.btnExit.Text = "Exit";
-            this.btnExit.UseVisualStyleBackColor = false;
-            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
-            // 
             // Form1
             // 
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(984, 781);
+            this.ClientSize = new System.Drawing.Size(984, 789);
             this.Controls.Add(this.titleLabel);
             this.Controls.Add(this.separator1);
             this.Controls.Add(this.labelSchema);
