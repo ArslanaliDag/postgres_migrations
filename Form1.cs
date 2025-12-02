@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace PostgresMigrations
 {
@@ -25,12 +18,13 @@ namespace PostgresMigrations
         public Form1()
         {
             InitializeComponent();
-            LoadTemplates();
 
             PendingPath = Path.Combine(MigrationsPath, "pending");
             TemplatesPath = Path.Combine(MigrationsPath, "templates");
             SchemasPath = Path.Combine(MigrationsPath, "schemas");
             CurrentUser = Environment.UserName;
+
+            LoadTemplates();
 
             // Ensure folders
             Directory.CreateDirectory(MigrationsPath);
@@ -504,22 +498,12 @@ CREATE TABLE IF NOT EXISTS migrations.db_migrations (
 );
 
 -- 3. Create indexes for performance
-CREATE INDEX IF NOT EXISTS idx_migrations_name_schema 
-ON migrations.db_migrations(migration_name, schema_name);
-
-CREATE INDEX IF NOT EXISTS idx_migrations_applied_at 
-ON migrations.db_migrations(applied_at);
-
 CREATE INDEX IF NOT EXISTS idx_migrations_schema 
 ON migrations.db_migrations(schema_name);
 
--- 4. Grant permissions (adjust as needed)
-GRANT USAGE ON SCHEMA migrations TO application_user;
-GRANT SELECT, INSERT, UPDATE ON migrations.db_migrations TO application_user;
-
--- 5. Create comment
-COMMENT ON SCHEMA migrations IS 'Centralized migration management schema';
-COMMENT ON TABLE migrations.db_migrations IS 'Centralized table tracking all database migrations across all schemas';
+-- 4. Create comment
+COMMENT ON SCHEMA migrations IS 'Миграции';
+COMMENT ON TABLE migrations.db_migrations IS 'Центральная таблица со всеми миграциями в базе';
 
 RAISE NOTICE 'Migrations system initialized successfully!';";
 

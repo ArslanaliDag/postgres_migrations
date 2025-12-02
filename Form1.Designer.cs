@@ -74,6 +74,9 @@ namespace PostgresMigrations
             this.btnCreate = new System.Windows.Forms.Button();
             this.btnPreview = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
+            this.labelLoadTemplate = new System.Windows.Forms.Label();
+            this.comboTemplates = new System.Windows.Forms.ComboBox();
+            this.btnLoadTemplate = new System.Windows.Forms.Button();
             this.buttonPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -119,9 +122,9 @@ namespace PostgresMigrations
             // 
             // labelCustomSchema
             // 
-            this.labelCustomSchema.Location = new System.Drawing.Point(430, 70);
+            this.labelCustomSchema.Location = new System.Drawing.Point(445, 70);
             this.labelCustomSchema.Name = "labelCustomSchema";
-            this.labelCustomSchema.Size = new System.Drawing.Size(100, 25);
+            this.labelCustomSchema.Size = new System.Drawing.Size(114, 25);
             this.labelCustomSchema.TabIndex = 4;
             this.labelCustomSchema.Text = "Custom schema:";
             this.labelCustomSchema.Visible = false;
@@ -130,7 +133,7 @@ namespace PostgresMigrations
             // 
             this.txtCustomSchema.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCustomSchema.Location = new System.Drawing.Point(540, 70);
+            this.txtCustomSchema.Location = new System.Drawing.Point(560, 69);
             this.txtCustomSchema.Name = "txtCustomSchema";
             this.txtCustomSchema.Size = new System.Drawing.Size(150, 25);
             this.txtCustomSchema.TabIndex = 5;
@@ -245,11 +248,11 @@ namespace PostgresMigrations
             this.txtSql.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSql.Location = new System.Drawing.Point(40, 375);
+            this.txtSql.Location = new System.Drawing.Point(40, 405);
             this.txtSql.Multiline = true;
             this.txtSql.Name = "txtSql";
             this.txtSql.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtSql.Size = new System.Drawing.Size(910, 301);
+            this.txtSql.Size = new System.Drawing.Size(910, 271);
             this.txtSql.TabIndex = 17;
             // 
             // btnInsertTemplate
@@ -325,16 +328,47 @@ namespace PostgresMigrations
             this.btnClear.UseVisualStyleBackColor = false;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
+            // labelLoadTemplate
+            // 
+            this.labelLoadTemplate.Location = new System.Drawing.Point(34, 367);
+            this.labelLoadTemplate.Name = "labelLoadTemplate";
+            this.labelLoadTemplate.Size = new System.Drawing.Size(104, 30);
+            this.labelLoadTemplate.TabIndex = 0;
+            this.labelLoadTemplate.Text = "Load template:";
+            this.labelLoadTemplate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // comboTemplates
+            // 
+            this.comboTemplates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboTemplates.Location = new System.Drawing.Point(144, 371);
+            this.comboTemplates.Name = "comboTemplates";
+            this.comboTemplates.Size = new System.Drawing.Size(300, 25);
+            this.comboTemplates.TabIndex = 1;
+            // 
+            // btnLoadTemplate
+            // 
+            this.btnLoadTemplate.BackColor = System.Drawing.Color.LightBlue;
+            this.btnLoadTemplate.Location = new System.Drawing.Point(459, 368);
+            this.btnLoadTemplate.Name = "btnLoadTemplate";
+            this.btnLoadTemplate.Size = new System.Drawing.Size(100, 30);
+            this.btnLoadTemplate.TabIndex = 2;
+            this.btnLoadTemplate.Text = "Load";
+            this.btnLoadTemplate.UseVisualStyleBackColor = false;
+            this.btnLoadTemplate.Click += new System.EventHandler(this.btnLoadTemplate_Click);
+            // 
             // Form1
             // 
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(984, 789);
+            this.Controls.Add(this.txtCustomSchema);
+            this.Controls.Add(this.labelLoadTemplate);
+            this.Controls.Add(this.comboTemplates);
+            this.Controls.Add(this.btnLoadTemplate);
             this.Controls.Add(this.titleLabel);
             this.Controls.Add(this.separator1);
             this.Controls.Add(this.labelSchema);
             this.Controls.Add(this.comboSchema);
             this.Controls.Add(this.labelCustomSchema);
-            this.Controls.Add(this.txtCustomSchema);
             this.Controls.Add(this.section2Label);
             this.Controls.Add(this.labelName);
             this.Controls.Add(this.txtName);
