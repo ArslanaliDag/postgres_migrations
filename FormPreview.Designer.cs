@@ -28,6 +28,7 @@ namespace PostgresMigrations
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPreview));
             this.txtPreview = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
@@ -49,6 +50,7 @@ namespace PostgresMigrations
             // 
             this.ClientSize = new System.Drawing.Size(834, 601);
             this.Controls.Add(this.txtPreview);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormPreview";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Migration Preview";
