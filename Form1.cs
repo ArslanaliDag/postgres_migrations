@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using ScintillaNET;
@@ -242,152 +243,6 @@ namespace PostgresMigrations
                 }
             };
         }
-        //private void ConfigureScintillaEditor(Scintilla scintilla)
-        //{
-        //    // Reset default styles
-        //    scintilla.StyleResetDefault();
-
-        //    // Configure basic editor settings
-        //    scintilla.Lexer = Lexer.Sql;
-        //    scintilla.Margins[0].Width = 16; // Line number margin
-        //    scintilla.Margins[0].Type = MarginType.Number;
-
-        //    // Configure SQL lexer styles
-        //    scintilla.Styles[Style.Sql.Identifier].ForeColor = System.Drawing.Color.Black;
-        //    scintilla.Styles[Style.Sql.String].ForeColor = System.Drawing.Color.DarkRed;
-        //    scintilla.Styles[Style.Sql.QuotedIdentifier].ForeColor = System.Drawing.Color.DarkGreen;
-        //    scintilla.Styles[Style.Sql.Comment].ForeColor = System.Drawing.Color.Green;
-        //    scintilla.Styles[Style.Sql.CommentLine].ForeColor = System.Drawing.Color.Green;
-        //    scintilla.Styles[Style.Sql.CommentDoc].ForeColor = System.Drawing.Color.Green;
-        //    scintilla.Styles[Style.Sql.Number].ForeColor = System.Drawing.Color.DarkOrange;
-        //    scintilla.Styles[Style.Sql.Word].ForeColor = System.Drawing.Color.Blue;
-        //    scintilla.Styles[Style.Sql.Word2].ForeColor = System.Drawing.Color.DarkBlue;
-        //    scintilla.Styles[Style.Sql.Operator].ForeColor = System.Drawing.Color.DarkMagenta;
-
-        //    // Enable line wrapping
-        //    scintilla.WrapMode = WrapMode.Word;
-
-        //    // Show line numbers
-        //    scintilla.Margins[1].Width = 0; // Disable fold margin
-
-        //    // Set font
-        //    scintilla.Font = new System.Drawing.Font("Consolas", 10);
-
-        //    // Enable code folding
-        //    scintilla.SetProperty("fold", "1");
-        //    scintilla.SetProperty("fold.compact", "1");
-        //    scintilla.SetProperty("fold.sql", "1");
-
-        //    // Set folding markers
-        //    scintilla.Markers[Marker.Folder].Symbol = MarkerSymbol.BoxPlus;
-        //    scintilla.Markers[Marker.FolderOpen].Symbol = MarkerSymbol.BoxMinus;
-        //    scintilla.Markers[Marker.FolderEnd].Symbol = MarkerSymbol.BoxPlusConnected;
-        //    scintilla.Markers[Marker.FolderMidTail].Symbol = MarkerSymbol.TCorner;
-        //    scintilla.Markers[Marker.FolderOpenMid].Symbol = MarkerSymbol.BoxMinusConnected;
-        //    scintilla.Markers[Marker.FolderSub].Symbol = MarkerSymbol.VLine;
-        //    scintilla.Markers[Marker.FolderTail].Symbol = MarkerSymbol.LCorner;
-
-        //    // Auto-indentation
-        //    scintilla.AutoCIgnoreCase = true;
-        //    scintilla.AutoCIgnoreCase = true;
-        //    scintilla.IndentWidth = 4;
-
-        //    // Braces highlighting
-        //    scintilla.Styles[Style.BraceLight].BackColor = System.Drawing.Color.LightGray;
-        //    scintilla.Styles[Style.BraceLight].ForeColor = System.Drawing.Color.Black;
-        //    scintilla.Styles[Style.BraceBad].ForeColor = System.Drawing.Color.Red;
-
-        //    // Selection color
-        //    scintilla.SetSelectionBackColor(true, System.Drawing.Color.LightSteelBlue);
-
-        //    // Caret settings
-        //    scintilla.CaretForeColor = System.Drawing.Color.Black;
-        //    scintilla.CaretLineVisible = true;
-        //    scintilla.CaretLineBackColor = System.Drawing.Color.FromArgb(240, 240, 255);
-
-        //    // Enable right margin at 80 chars
-        //    scintilla.Margins[2].Width = 1;
-        //    scintilla.Margins[2].Type = MarginType.Color;
-        //    scintilla.Margins[2].BackColor = System.Drawing.Color.LightGray;
-        //    //scintilla.SetMarginWidthN(2, 0); // Initially hidden
-
-        //    // Set right margin at 120 chars
-        //    scintilla.Margins[3].Width = 1;
-        //    scintilla.Margins[3].Type = MarginType.Color;
-        //    scintilla.Margins[3].BackColor = System.Drawing.Color.FromArgb(255, 200, 200);
-        //    //scintilla.SetMarginWidthN(3, 0); // Initially hidden
-
-        //    // Set SQL keywords
-        //    string sqlKeywords =
-        //        "SELECT INSERT UPDATE DELETE CREATE ALTER DROP TRUNCATE TABLE " +
-        //        "FROM WHERE AND OR NOT LIKE IN BETWEEN IS NULL " +
-        //        "ORDER BY GROUP BY HAVING JOIN INNER LEFT RIGHT FULL OUTER " +
-        //        "ON AS CASE WHEN THEN ELSE END " +
-        //        "UNION INTERSECT EXCEPT DISTINCT ALL " +
-        //        "VALUES SET INTO " +
-        //        "BEGIN END COMMIT ROLLBACK SAVEPOINT " +
-        //        "FUNCTION PROCEDURE TRIGGER VIEW INDEX SEQUENCE " +
-        //        "PRIMARY KEY FOREIGN KEY REFERENCES CONSTRAINT " +
-        //        "INTEGER VARCHAR TEXT CHAR BOOLEAN DATE TIMESTAMP NUMERIC DECIMAL " +
-        //        "TRUE FALSE NULL " +
-        //        "IF EXISTS IF NOT EXISTS " +
-        //        "CASCADE RESTRICT";
-
-        //    scintilla.SetKeywords(0, sqlKeywords);
-
-        //    // Set PostgreSQL specific keywords
-        //    string sqlKeywords2 =
-        //        "SERIAL BIGSERIAL JSONB UUID " +
-        //        "CURRENT_TIMESTAMP CURRENT_DATE CURRENT_TIME " +
-        //        "NOW() " +
-        //        "RETURNS LANGUAGE PLPGSQL " +
-        //        "EXECUTE RAISE NOTICE EXCEPTION " +
-        //        "DO $$ $$ " +
-        //        "CONCURRENTLY " +
-        //        "ADD COLUMN DROP COLUMN RENAME COLUMN " +
-        //        "ALTER COLUMN TYPE " +
-        //        "WITHOUT TIME ZONE WITH TIME ZONE " +
-        //        "DEFAULT NOT NULL UNIQUE CHECK " +
-        //        "COMMENT ON TABLE COMMENT ON COLUMN " +
-        //        "GRANT REVOKE";
-
-        //    scintilla.SetKeywords(1, sqlKeywords2);
-
-        //    // Set margins for better appearance
-        //    scintilla.Margins[0].Width = 50;
-        //    scintilla.Margins[0].Sensitive = true;
-        //    scintilla.Margins[0].Type = MarginType.Number;
-
-        //    // Show current line indicator
-        //    scintilla.CaretLineVisible = true;
-        //    scintilla.CaretLineBackColor = System.Drawing.Color.FromArgb(255, 255, 240);
-
-        //    // Set tab settings
-        //    scintilla.UseTabs = false;
-        //    scintilla.TabWidth = 4;
-
-        //    // Show white space (optional)
-        //    scintilla.ViewWhitespace = WhitespaceMode.Invisible;
-
-        //    // Enable scrolling
-        //    scintilla.ScrollWidth = 1;
-        //    scintilla.ScrollWidthTracking = true;
-
-        //    // Enable right-click context menu
-        //    var contextMenu = new ContextMenuStrip();
-        //    contextMenu.Items.Add("Cut", null, (s, e) => scintilla.Cut());
-        //    contextMenu.Items.Add("Copy", null, (s, e) => scintilla.Copy());
-        //    contextMenu.Items.Add("Paste", null, (s, e) => scintilla.Paste());
-        //    contextMenu.Items.Add("-");
-        //    contextMenu.Items.Add("Select All", null, (s, e) => scintilla.SelectAll());
-        //    contextMenu.Items.Add("-");
-        //    contextMenu.Items.Add("Comment Line", null, (s, e) => CommentLine(scintilla));
-        //    contextMenu.Items.Add("Uncomment Line", null, (s, e) => UncommentLine(scintilla));
-        //    contextMenu.Items.Add("-");
-        //    contextMenu.Items.Add("Format SQL", null, (s, e) => FormatSql(scintilla));
-
-        //    scintilla.ContextMenuStrip = contextMenu;
-        //}
 
         private void CommentLine(Scintilla scintilla)
         {
@@ -497,7 +352,8 @@ namespace PostgresMigrations
             string date = DateTime.Now.ToString("yyyyMMdd_HHmmss");
             string safeName = GetSafeName(name);
             string safeSchema = GetSafeName(schema);
-            return $"{date}_{safeSchema}_{safeName}.sql";
+            //return $"{date}_{safeSchema}_{safeName}.sql";
+            return $"{date}_{safeSchema}_{safeName}"; // Без .sql в конце
         }
 
         // Template text provider similar to PowerShell Get-SQLTemplate
@@ -713,9 +569,13 @@ END $$;
             string downFile = Path.Combine(PendingPath, baseName + "_DOWN.sql");
 
             string author = txtAuthor.Text.Trim();
+            if (string.IsNullOrWhiteSpace(author)) author = CurrentUser;
+
             string comment = txtComment.Text.Trim();
-            string sqlUp = txtSqlUp.Text;
-            string sqlDown = txtSqlDown.Text;
+            if (string.IsNullOrWhiteSpace(comment)) comment = $"Migration: {migrationName} for schema: {targetSchema}";
+
+            string sqlUp = txtSqlUp.Text.Trim();
+            string sqlDown = txtSqlDown.Text.Trim();
 
             if (string.IsNullOrWhiteSpace(sqlUp))
             {
@@ -736,25 +596,192 @@ END $$;
 
             try
             {
-                File.WriteAllText(upFile, sqlUp, Encoding.UTF8);
-                File.WriteAllText(downFile, sqlDown, Encoding.UTF8);
+                // Build UP migration content
+                var sbUp = new StringBuilder();
+                sbUp.AppendLine($"-- {baseName}_UP.sql");
+                sbUp.AppendLine($"-- Schema: {targetSchema}");
+                sbUp.AppendLine($"-- Author: {author}");
+                sbUp.AppendLine($"-- Date: {DateTime.Now:dd.MM.yyyy HH:mm:ss}");
+                sbUp.AppendLine($"-- Type: {comboType.SelectedItem}");
+                sbUp.AppendLine($"-- Description: {comment}");
+                sbUp.AppendLine();
+                sbUp.AppendLine("DO $$");
+                sbUp.AppendLine("DECLARE");
+                sbUp.AppendLine("    start_time TIMESTAMP;");
+                sbUp.AppendLine($"    migration_id TEXT := '{baseName}_UP';");
+                sbUp.AppendLine($"    migration_desc TEXT := '{EscapeForSqlLiteral(comment)}';");
+                sbUp.AppendLine($"    target_schema TEXT := '{EscapeForSqlLiteral(targetSchema)}';");
+                sbUp.AppendLine("BEGIN");
+                sbUp.AppendLine("    start_time := clock_timestamp();");
+                sbUp.AppendLine("    RAISE NOTICE 'Applying UP migration % to schema: %', migration_id, target_schema;");
+                sbUp.AppendLine();
+                sbUp.AppendLine("    -- === UP SQL MIGRATION CODE ===");
+                sbUp.AppendLine();
+                sbUp.AppendLine(sqlUp);
+                sbUp.AppendLine();
+                sbUp.AppendLine("    -- === END UP SQL CODE ===");
+                sbUp.AppendLine();
+                sbUp.AppendLine("    INSERT INTO migrations.db_migrations (");
+                sbUp.AppendLine("        migration_name,");
+                sbUp.AppendLine("        schema_name,");
+                sbUp.AppendLine("        notes,");
+                sbUp.AppendLine("        execution_time_ms");
+                sbUp.AppendLine("    ) VALUES (");
+                sbUp.AppendLine("        migration_id,");
+                sbUp.AppendLine("        target_schema,");
+                sbUp.AppendLine("        migration_desc || ' (UP)',");
+                sbUp.AppendLine("        EXTRACT(EPOCH FROM (clock_timestamp() - start_time)) * 1000");
+                sbUp.AppendLine("    );");
+                sbUp.AppendLine();
+                sbUp.AppendLine("    RAISE NOTICE 'UP migration % for schema % completed successfully', migration_id, target_schema;");
+                sbUp.AppendLine();
+                sbUp.AppendLine("EXCEPTION");
+                sbUp.AppendLine("    WHEN others THEN");
+                sbUp.AppendLine("        RAISE EXCEPTION 'Error in UP migration % for schema %: %', migration_id, target_schema, SQLERRM;");
+                sbUp.AppendLine("END $$;");
+
+                // Build DOWN migration content
+                var sbDown = new StringBuilder();
+                sbDown.AppendLine($"-- {baseName}_DOWN.sql");
+                sbDown.AppendLine($"-- Schema: {targetSchema}");
+                sbDown.AppendLine($"-- Author: {author}");
+                sbDown.AppendLine($"-- Date: {DateTime.Now:dd.MM.yyyy HH:mm:ss}");
+                sbDown.AppendLine($"-- Type: {comboType.SelectedItem}");
+                sbDown.AppendLine($"-- Description: {comment} (ROLLBACK)");
+                sbDown.AppendLine();
+                sbDown.AppendLine("DO $$");
+                sbDown.AppendLine("DECLARE");
+                sbDown.AppendLine("    start_time TIMESTAMP;");
+                sbDown.AppendLine($"    migration_id TEXT := '{baseName}_DOWN';");
+                sbDown.AppendLine($"    migration_desc TEXT := '{EscapeForSqlLiteral(comment)}';");
+                sbDown.AppendLine($"    target_schema TEXT := '{EscapeForSqlLiteral(targetSchema)}';");
+                sbDown.AppendLine("BEGIN");
+                sbDown.AppendLine("    start_time := clock_timestamp();");
+                sbDown.AppendLine("    RAISE NOTICE 'Applying DOWN migration (rollback) % to schema: %', migration_id, target_schema;");
+                sbDown.AppendLine();
+                sbDown.AppendLine("    -- === DOWN SQL MIGRATION CODE (ROLLBACK) ===");
+                sbDown.AppendLine();
+                sbDown.AppendLine(sqlDown);
+                sbDown.AppendLine();
+                sbDown.AppendLine("    -- === END DOWN SQL CODE ===");
+                sbDown.AppendLine();
+                sbDown.AppendLine("    -- Insert rollback record");
+                sbDown.AppendLine("    INSERT INTO migrations.db_migrations (");
+                sbDown.AppendLine("        migration_name,");
+                sbDown.AppendLine("        schema_name,");
+                sbDown.AppendLine("        notes,");
+                sbDown.AppendLine("        execution_time_ms,");
+                sbDown.AppendLine("        success");
+                sbDown.AppendLine("    ) VALUES (");
+                sbDown.AppendLine("        migration_id,");
+                sbDown.AppendLine("        target_schema,");
+                sbDown.AppendLine("        migration_desc || ' (DOWN/ROLLBACK applied)',");
+                sbDown.AppendLine("        EXTRACT(EPOCH FROM (clock_timestamp() - start_time)) * 1000,");
+                sbDown.AppendLine("        true"); // Можете установить false если хотите отметить как неудачную операцию
+                sbDown.AppendLine("    );");
+                sbDown.AppendLine();
+                sbDown.AppendLine("    RAISE NOTICE 'DOWN migration (rollback) % for schema % completed', migration_id, target_schema;");
+                sbDown.AppendLine();
+                sbDown.AppendLine("EXCEPTION");
+                sbDown.AppendLine("    WHEN others THEN");
+                sbDown.AppendLine("        RAISE EXCEPTION 'Error in DOWN migration % for schema %: %', migration_id, target_schema, SQLERRM;");
+                sbDown.AppendLine("END $$;");
+
+                // Save files
+                File.WriteAllText(upFile, sbUp.ToString(), Encoding.UTF8);
+                File.WriteAllText(downFile, sbDown.ToString(), Encoding.UTF8);
+
+                // Save schema config if not exists
+                string schemaConfigPath = Path.Combine(SchemasPath, $"{GetSafeName(targetSchema)}.txt");
+                if (!File.Exists(schemaConfigPath))
+                {
+                    var cfgSb = new StringBuilder();
+                    cfgSb.AppendLine($"Schema: {targetSchema}");
+                    cfgSb.AppendLine($"Created: {DateTime.Now:yyyy-MM-dd}");
+                    cfgSb.AppendLine($"Description: Database schema for {targetSchema}");
+                    cfgSb.AppendLine($"Last migration: {baseName}");
+                    cfgSb.AppendLine($"Migration count: 1");
+                    File.WriteAllText(schemaConfigPath, cfgSb.ToString(), Encoding.UTF8);
+                }
+                else
+                {
+                    // Update existing config
+                    var lines = File.ReadAllLines(schemaConfigPath).ToList();
+                    bool foundLastMigration = false;
+                    bool foundMigrationCount = false;
+
+                    for (int i = 0; i < lines.Count; i++)
+                    {
+                        if (lines[i].StartsWith("Last migration:"))
+                        {
+                            lines[i] = $"Last migration: {baseName}";
+                            foundLastMigration = true;
+                        }
+                        else if (lines[i].StartsWith("Migration count:"))
+                        {
+                            if (int.TryParse(lines[i].Split(':')[1].Trim(), out int count))
+                            {
+                                lines[i] = $"Migration count: {count + 1}";
+                            }
+                            foundMigrationCount = true;
+                        }
+                    }
+
+                    if (!foundLastMigration)
+                        lines.Add($"Last migration: {baseName}");
+                    if (!foundMigrationCount)
+                        lines.Add("Migration count: 1");
+
+                    File.WriteAllLines(schemaConfigPath, lines, Encoding.UTF8);
+                }
 
                 MessageBox.Show(
-                    $"Migration created!\n\nUP: {upFile}\nDOWN: {downFile}",
+                    $"Migration created successfully!\n\n" +
+                    $"UP File: {Path.GetFileName(upFile)}\n" +
+                    $"DOWN File: {Path.GetFileName(downFile)}\n" +
+                    $"Schema: {targetSchema}\n" +
+                    $"Folder: {PendingPath}\n\n" +
+                    $"Next steps:\n" +
+                    $"1. Ensure migrations schema exists\n" +
+                    $"2. Apply UP migration in DBeaver or psql\n" +
+                    $"3. Check migrations.db_migrations table\n" +
+                    $"4. DOWN migration is for rollback only",
                     "Success",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
 
-                Process.Start(new ProcessStartInfo("explorer.exe", $"\"{PendingPath}\"")
+                // Open folder and UP file in notepad
+                try
                 {
-                    UseShellExecute = true
-                });
+                    Process.Start(new ProcessStartInfo("explorer.exe", $"\"{PendingPath}\"")
+                    {
+                        UseShellExecute = true
+                    });
+
+                    // Open only UP file (DOWN is for rollback)
+                    Process.Start(new ProcessStartInfo("notepad.exe", $"\"{upFile}\"")
+                    {
+                        UseShellExecute = true
+                    });
+                }
+                catch
+                {
+                    // ignore process start errors
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error saving files:\n{ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private string EscapeForSqlLiteral(string input)
+        {
+            if (input == null) return "";
+
+            // Экранирование одинарных кавычек для SQL
+            return input.Replace("'", "''");
         }
 
         private void btnClear_Click(object sender, EventArgs e)
