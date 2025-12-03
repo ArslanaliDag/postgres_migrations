@@ -13,13 +13,10 @@ namespace PostgresMigrations
         private Label section2Label;
         private Label labelName;
         private TextBox txtName;
-        private Label nameHint;
         private Label labelAuthor;
         private TextBox txtAuthor;
         private Label labelComment;
         private TextBox txtComment;
-        private Label section3Label;
-        private ComboBox comboType;
 
         protected override void Dispose(bool disposing)
         {
@@ -38,13 +35,10 @@ namespace PostgresMigrations
             this.section2Label = new System.Windows.Forms.Label();
             this.labelName = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
-            this.nameHint = new System.Windows.Forms.Label();
             this.labelAuthor = new System.Windows.Forms.Label();
             this.txtAuthor = new System.Windows.Forms.TextBox();
             this.labelComment = new System.Windows.Forms.Label();
             this.txtComment = new System.Windows.Forms.TextBox();
-            this.section3Label = new System.Windows.Forms.Label();
-            this.comboType = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.txtSqlUp = new ScintillaNET.Scintilla();
@@ -66,16 +60,16 @@ namespace PostgresMigrations
             // labelSchema
             // 
             this.labelSchema.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.labelSchema.Location = new System.Drawing.Point(20, 28);
+            this.labelSchema.Location = new System.Drawing.Point(20, 45);
             this.labelSchema.Name = "labelSchema";
             this.labelSchema.Size = new System.Drawing.Size(200, 25);
             this.labelSchema.TabIndex = 2;
-            this.labelSchema.Text = "Target Schema:";
+            this.labelSchema.Text = "1. Target Schema:";
             // 
             // comboSchema
             // 
             this.comboSchema.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboSchema.Location = new System.Drawing.Point(200, 28);
+            this.comboSchema.Location = new System.Drawing.Point(200, 45);
             this.comboSchema.Name = "comboSchema";
             this.comboSchema.Size = new System.Drawing.Size(178, 25);
             this.comboSchema.TabIndex = 3;
@@ -83,7 +77,7 @@ namespace PostgresMigrations
             // 
             // labelCustomSchema
             // 
-            this.labelCustomSchema.Location = new System.Drawing.Point(392, 28);
+            this.labelCustomSchema.Location = new System.Drawing.Point(392, 45);
             this.labelCustomSchema.Name = "labelCustomSchema";
             this.labelCustomSchema.Size = new System.Drawing.Size(114, 25);
             this.labelCustomSchema.TabIndex = 4;
@@ -94,7 +88,7 @@ namespace PostgresMigrations
             // 
             this.txtCustomSchema.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCustomSchema.Location = new System.Drawing.Point(507, 27);
+            this.txtCustomSchema.Location = new System.Drawing.Point(507, 44);
             this.txtCustomSchema.Name = "txtCustomSchema";
             this.txtCustomSchema.Size = new System.Drawing.Size(150, 25);
             this.txtCustomSchema.TabIndex = 5;
@@ -103,7 +97,7 @@ namespace PostgresMigrations
             // section2Label
             // 
             this.section2Label.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.section2Label.Location = new System.Drawing.Point(20, 68);
+            this.section2Label.Location = new System.Drawing.Point(20, 85);
             this.section2Label.Name = "section2Label";
             this.section2Label.Size = new System.Drawing.Size(300, 25);
             this.section2Label.TabIndex = 6;
@@ -111,7 +105,7 @@ namespace PostgresMigrations
             // 
             // labelName
             // 
-            this.labelName.Location = new System.Drawing.Point(40, 103);
+            this.labelName.Location = new System.Drawing.Point(40, 120);
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(150, 25);
             this.labelName.TabIndex = 7;
@@ -122,26 +116,14 @@ namespace PostgresMigrations
             this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtName.Font = new System.Drawing.Font("Consolas", 10F);
-            this.txtName.Location = new System.Drawing.Point(200, 103);
+            this.txtName.Location = new System.Drawing.Point(200, 120);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(400, 23);
             this.txtName.TabIndex = 8;
             // 
-            // nameHint
-            // 
-            this.nameHint.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.nameHint.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.nameHint.ForeColor = System.Drawing.Color.Gray;
-            this.nameHint.Location = new System.Drawing.Point(610, 103);
-            this.nameHint.Name = "nameHint";
-            this.nameHint.Size = new System.Drawing.Size(300, 25);
-            this.nameHint.TabIndex = 9;
-            this.nameHint.Text = "English letters and underscores only";
-            // 
             // labelAuthor
             // 
-            this.labelAuthor.Location = new System.Drawing.Point(40, 143);
+            this.labelAuthor.Location = new System.Drawing.Point(40, 160);
             this.labelAuthor.Name = "labelAuthor";
             this.labelAuthor.Size = new System.Drawing.Size(150, 25);
             this.labelAuthor.TabIndex = 10;
@@ -152,47 +134,28 @@ namespace PostgresMigrations
             this.txtAuthor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtAuthor.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtAuthor.Location = new System.Drawing.Point(200, 143);
+            this.txtAuthor.Location = new System.Drawing.Point(200, 160);
             this.txtAuthor.Name = "txtAuthor";
             this.txtAuthor.Size = new System.Drawing.Size(400, 25);
             this.txtAuthor.TabIndex = 11;
             // 
             // labelComment
             // 
-            this.labelComment.Location = new System.Drawing.Point(40, 183);
+            this.labelComment.Location = new System.Drawing.Point(40, 200);
             this.labelComment.Name = "labelComment";
             this.labelComment.Size = new System.Drawing.Size(150, 25);
             this.labelComment.TabIndex = 12;
-            this.labelComment.Text = "Comment (notes):";
+            this.labelComment.Text = "Comment:";
             // 
             // txtComment
             // 
             this.txtComment.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtComment.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtComment.Location = new System.Drawing.Point(200, 183);
+            this.txtComment.Location = new System.Drawing.Point(200, 200);
             this.txtComment.Name = "txtComment";
-            this.txtComment.Size = new System.Drawing.Size(650, 25);
+            this.txtComment.Size = new System.Drawing.Size(400, 25);
             this.txtComment.TabIndex = 13;
-            // 
-            // section3Label
-            // 
-            this.section3Label.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.section3Label.Location = new System.Drawing.Point(20, 223);
-            this.section3Label.Name = "section3Label";
-            this.section3Label.Size = new System.Drawing.Size(300, 25);
-            this.section3Label.TabIndex = 14;
-            this.section3Label.Text = "3. Migration Type";
-            // 
-            // comboType
-            // 
-            this.comboType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboType.Location = new System.Drawing.Point(40, 258);
-            this.comboType.Name = "comboType";
-            this.comboType.Size = new System.Drawing.Size(800, 25);
-            this.comboType.TabIndex = 15;
             // 
             // tabControl1
             // 
@@ -201,21 +164,23 @@ namespace PostgresMigrations
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(0, 305);
+            this.tabControl1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.tabControl1.Location = new System.Drawing.Point(0, 240);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(984, 404);
+            this.tabControl1.Size = new System.Drawing.Size(984, 469);
             this.tabControl1.TabIndex = 20;
             // 
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.txtSqlUp);
+            this.tabPage1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.tabPage1.Location = new System.Drawing.Point(4, 26);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(976, 374);
+            this.tabPage1.Size = new System.Drawing.Size(976, 439);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "4. SQL Migration Code (UP)";
+            this.tabPage1.Text = "3. SQL Migration Code (UP)";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // txtSqlUp
@@ -223,18 +188,19 @@ namespace PostgresMigrations
             this.txtSqlUp.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSqlUp.Location = new System.Drawing.Point(3, 3);
             this.txtSqlUp.Name = "txtSqlUp";
-            this.txtSqlUp.Size = new System.Drawing.Size(970, 368);
+            this.txtSqlUp.Size = new System.Drawing.Size(970, 433);
             this.txtSqlUp.TabIndex = 2;
             // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.txtSqlDown);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.tabPage2.Location = new System.Drawing.Point(4, 26);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(976, 378);
+            this.tabPage2.Size = new System.Drawing.Size(796, 442);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "5. SQL Migration Code (DOWN)";
+            this.tabPage2.Text = "4. SQL Migration Code (DOWN)";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // txtSqlDown
@@ -242,7 +208,7 @@ namespace PostgresMigrations
             this.txtSqlDown.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSqlDown.Location = new System.Drawing.Point(3, 3);
             this.txtSqlDown.Name = "txtSqlDown";
-            this.txtSqlDown.Size = new System.Drawing.Size(970, 372);
+            this.txtSqlDown.Size = new System.Drawing.Size(790, 436);
             this.txtSqlDown.TabIndex = 4;
             // 
             // menuStrip1
@@ -317,13 +283,10 @@ namespace PostgresMigrations
             this.Controls.Add(this.section2Label);
             this.Controls.Add(this.labelName);
             this.Controls.Add(this.txtName);
-            this.Controls.Add(this.nameHint);
             this.Controls.Add(this.labelAuthor);
             this.Controls.Add(this.txtAuthor);
             this.Controls.Add(this.labelComment);
             this.Controls.Add(this.txtComment);
-            this.Controls.Add(this.section3Label);
-            this.Controls.Add(this.comboType);
             this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

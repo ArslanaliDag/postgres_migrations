@@ -35,15 +35,6 @@ namespace PostgresMigrations
             // Initialize UI defaults
             comboSchema.Items.AddRange(new object[] { "policyregistry", "users_schema", "public", "custom" });
             comboSchema.SelectedIndex = 0;
-            comboType.Items.AddRange(new object[] {
-                "CREATE TABLE - Create new table",
-                "ALTER TABLE - Modify table",
-                "CREATE FUNCTION - Create function",
-                "CREATE INDEX - Create index",
-                "CREATE SCHEMA - Create schema",
-                "DATA MIGRATION - Data migration",
-                "CUSTOM - Custom SQL" });
-            comboType.SelectedIndex = 0;
 
             txtAuthor.Text = CurrentUser;
             txtName.Text = "add_new_column";
@@ -313,18 +304,9 @@ namespace PostgresMigrations
             return sb.ToString();
         }
 
-        //private string GetMigrationFileName(string name, string schema)
-        //{
-        //    string date = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-        //    string safeName = GetSafeName(name);
-        //    string safeSchema = GetSafeName(schema);
-        //    //return $"{date}_{safeSchema}_{safeName}.sql";
-        //    return $"{date}_{safeSchema}_{safeName}"; // Без .sql в конце
-        //}
-
         private string GetMigrationFileName(string name, string schema)
         {
-            string date = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            string date = DateTime.Now.ToString("HHmmss_MMddyyyy");
             string safeName = GetSafeName(name);
 
             // Формат: yyyyMMdd_HHmmss_migrationname
@@ -451,26 +433,6 @@ END $$;
             txtCustomSchema.Visible = isCustom;
         }
 
-        private void btnInsertTemplate_Click(object sender, EventArgs e)
-        {
-            string target = GetTargetSchema();
-            if (string.IsNullOrWhiteSpace(target))
-            {
-                MessageBox.Show("Please select or enter a schema!", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            var template = GetSqlTemplateByType(
-                comboType.SelectedItem?.ToString() ?? "CUSTOM",
-                target);
-
-            template = template.Replace("{schema}", target);
-
-            txtSqlUp.Text = template;
-            txtSqlDown.Text = "-- Write DOWN migration here\n-- Inverse of UP script";
-        }
-
         private string EscapeForSqlLiteral(string input)
         {
             if (input == null) return "";
@@ -542,7 +504,6 @@ END $$;
                 sbUp.AppendLine($"-- Schema: {targetSchema}");
                 sbUp.AppendLine($"-- Author: {author}");
                 sbUp.AppendLine($"-- Date: {DateTime.Now:dd.MM.yyyy HH:mm:ss}");
-                sbUp.AppendLine($"-- Type: {comboType.SelectedItem}");
                 sbUp.AppendLine($"-- Description: {comment}");
                 sbUp.AppendLine();
                 sbUp.AppendLine("DO $$");
@@ -586,7 +547,6 @@ END $$;
                 sbDown.AppendLine($"-- Schema: {targetSchema}");
                 sbDown.AppendLine($"-- Author: {author}");
                 sbDown.AppendLine($"-- Date: {DateTime.Now:dd.MM.yyyy HH:mm:ss}");
-                sbDown.AppendLine($"-- Type: {comboType.SelectedItem}");
                 sbDown.AppendLine($"-- Description: {comment} (ROLLBACK)");
                 sbDown.AppendLine();
                 sbDown.AppendLine("DO $$");
@@ -775,7 +735,6 @@ END $$;
             txtSqlDown.Text = @"-- Write DOWN migration here";
             txtComment.Text = "Added new field for storing information";
             comboSchema.SelectedIndex = 0;
-            comboType.SelectedIndex = 0;
             txtCustomSchema.Text = "";
         }
 
