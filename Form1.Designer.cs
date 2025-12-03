@@ -229,15 +229,15 @@ namespace PostgresMigrations
             this.previewToolStripMenuItem1,
             this.generateSchemaInitScriptToolStripMenuItem});
             this.createMigrationToolStripMenuItem.Name = "createMigrationToolStripMenuItem";
-            this.createMigrationToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
-            this.createMigrationToolStripMenuItem.Text = "Migration";
+            this.createMigrationToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.createMigrationToolStripMenuItem.Text = "File";
             // 
             // createMirgationFilesToolStripMenuItem
             // 
             this.createMirgationFilesToolStripMenuItem.Name = "createMirgationFilesToolStripMenuItem";
             this.createMirgationFilesToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
             this.createMirgationFilesToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
-            this.createMirgationFilesToolStripMenuItem.Text = "Create mirgations files";
+            this.createMirgationFilesToolStripMenuItem.Text = "Create migrations files";
             this.createMirgationFilesToolStripMenuItem.Click += new System.EventHandler(this.createMirgationFilesToolStripMenuItem_Click);
             // 
             // previewToolStripMenuItem1
@@ -252,7 +252,7 @@ namespace PostgresMigrations
             // 
             this.generateSchemaInitScriptToolStripMenuItem.Name = "generateSchemaInitScriptToolStripMenuItem";
             this.generateSchemaInitScriptToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
-            this.generateSchemaInitScriptToolStripMenuItem.Text = "Generate Schema Init Script";
+            this.generateSchemaInitScriptToolStripMenuItem.Text = "Generate schema init script";
             this.generateSchemaInitScriptToolStripMenuItem.Click += new System.EventHandler(this.generateSchemaInitScriptToolStripMenuItem_Click);
             // 
             // previewToolStripMenuItem
