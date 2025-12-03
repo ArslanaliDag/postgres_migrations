@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using ScintillaNET;
 
 namespace PostgresMigrations
 {
@@ -33,42 +34,406 @@ namespace PostgresMigrations
             LoadTemplates();
 
             // Initialize UI defaults
-            comboSchema.Items.AddRange(new object[] {
-        "policyregistry",
-        "users_schema",
-        "public",
-        "custom"
-    });
+            comboSchema.Items.AddRange(new object[] { "policyregistry", "users_schema", "public", "custom" });
             comboSchema.SelectedIndex = 0;
-
             comboType.Items.AddRange(new object[] {
-        "CREATE TABLE - Create new table",
-        "ALTER TABLE - Modify table",
-        "CREATE FUNCTION - Create function",
-        "CREATE INDEX - Create index",
-        "CREATE SCHEMA - Create schema",
-        "DATA MIGRATION - Data migration",
-        "CUSTOM - Custom SQL"
-    });
+                "CREATE TABLE - Create new table",
+                "ALTER TABLE - Modify table",
+                "CREATE FUNCTION - Create function",
+                "CREATE INDEX - Create index",
+                "CREATE SCHEMA - Create schema",
+                "DATA MIGRATION - Data migration",
+                "CUSTOM - Custom SQL" });
             comboType.SelectedIndex = 0;
 
             txtAuthor.Text = CurrentUser;
             txtName.Text = "add_new_column";
             txtComment.Text = "Added new field for storing information";
 
-            // NEW — apply same font for both text areas
-            var monofont = new System.Drawing.Font("Consolas", 10);
-            txtSqlUp.Font = monofont;
-            txtSqlDown.Font = monofont;
+            // Configure Scintilla for SQL syntax highlighting
+            ConfigureScintillaEditor(txtSqlUp);
+            ConfigureScintillaEditor(txtSqlDown);
 
-            // NEW — default UP/DOWN content
-            txtSqlUp.Text =
-        @"-- Write UP migration here
+            // Set default SQL content
+            txtSqlUp.Text = @"-- Write UP migration here
 -- Example: CREATE TABLE {schema}.new_table (...);";
 
-            txtSqlDown.Text =
-        @"-- Write DOWN migration here
+            txtSqlDown.Text = @"-- Write DOWN migration here
 -- Example: DROP TABLE {schema}.new_table;";
+        }
+
+        private void ConfigureScintillaEditor(Scintilla scintilla)
+        {
+            // Reset default styles
+            scintilla.StyleResetDefault();
+
+            // Configure basic editor settings
+            scintilla.Lexer = Lexer.Sql;
+            scintilla.Margins[0].Width = 16; // Line number margin
+            scintilla.Margins[0].Type = MarginType.Number;
+
+            // Configure SQL lexer styles
+            scintilla.Styles[Style.Sql.Identifier].ForeColor = System.Drawing.Color.Black;
+            scintilla.Styles[Style.Sql.String].ForeColor = System.Drawing.Color.DarkRed;
+            scintilla.Styles[Style.Sql.QuotedIdentifier].ForeColor = System.Drawing.Color.DarkGreen;
+            scintilla.Styles[Style.Sql.Comment].ForeColor = System.Drawing.Color.Green;
+            scintilla.Styles[Style.Sql.CommentLine].ForeColor = System.Drawing.Color.Green;
+            scintilla.Styles[Style.Sql.CommentDoc].ForeColor = System.Drawing.Color.Green;
+            scintilla.Styles[Style.Sql.Number].ForeColor = System.Drawing.Color.DarkOrange;
+            scintilla.Styles[Style.Sql.Word].ForeColor = System.Drawing.Color.Blue;
+            scintilla.Styles[Style.Sql.Word2].ForeColor = System.Drawing.Color.DarkBlue;
+            scintilla.Styles[Style.Sql.Operator].ForeColor = System.Drawing.Color.DarkMagenta;
+
+            // Enable line wrapping
+            scintilla.WrapMode = WrapMode.Word;
+
+            // Show line numbers
+            scintilla.Margins[1].Width = 0; // Disable fold margin
+
+            // Set font
+            scintilla.Font = new System.Drawing.Font("Consolas", 10);
+
+            // Enable code folding
+            scintilla.SetProperty("fold", "1");
+            scintilla.SetProperty("fold.compact", "1");
+            scintilla.SetProperty("fold.sql", "1");
+
+            // Set folding markers
+            scintilla.Markers[Marker.Folder].Symbol = MarkerSymbol.BoxPlus;
+            scintilla.Markers[Marker.FolderOpen].Symbol = MarkerSymbol.BoxMinus;
+            scintilla.Markers[Marker.FolderEnd].Symbol = MarkerSymbol.BoxPlusConnected;
+            scintilla.Markers[Marker.FolderMidTail].Symbol = MarkerSymbol.TCorner;
+            scintilla.Markers[Marker.FolderOpenMid].Symbol = MarkerSymbol.BoxMinusConnected;
+            scintilla.Markers[Marker.FolderSub].Symbol = MarkerSymbol.VLine;
+            scintilla.Markers[Marker.FolderTail].Symbol = MarkerSymbol.LCorner;
+
+            // Auto-indentation settings
+            scintilla.IndentationGuides = IndentView.LookBoth;
+            scintilla.TabWidth = 4;
+            scintilla.UseTabs = false; // Используем пробелы вместо табуляции
+            scintilla.IndentWidth = 4;
+
+            // Configure auto-indentation
+            scintilla.AutoCIgnoreCase = true;
+
+            // Braces highlighting
+            scintilla.Styles[Style.BraceLight].BackColor = System.Drawing.Color.LightGray;
+            scintilla.Styles[Style.BraceLight].ForeColor = System.Drawing.Color.Black;
+            scintilla.Styles[Style.BraceBad].ForeColor = System.Drawing.Color.Red;
+
+            // Selection color
+            scintilla.SetSelectionBackColor(true, System.Drawing.Color.LightSteelBlue);
+
+            // Caret settings
+            scintilla.CaretForeColor = System.Drawing.Color.Black;
+            scintilla.CaretLineVisible = true;
+            scintilla.CaretLineBackColor = System.Drawing.Color.FromArgb(240, 240, 255);
+
+            // Enable right margin at 80 chars
+            scintilla.Margins[2].Width = 1;
+            scintilla.Margins[2].Type = MarginType.Color;
+            scintilla.Margins[2].BackColor = System.Drawing.Color.LightGray;
+
+            // Set right margin at 120 chars
+            scintilla.Margins[3].Width = 1;
+            scintilla.Margins[3].Type = MarginType.Color;
+            scintilla.Margins[3].BackColor = System.Drawing.Color.FromArgb(255, 200, 200);
+
+            // Set SQL keywords
+            string sqlKeywords =
+                "SELECT INSERT UPDATE DELETE CREATE ALTER DROP TRUNCATE TABLE " +
+                "FROM WHERE AND OR NOT LIKE IN BETWEEN IS NULL " +
+                "ORDER BY GROUP BY HAVING JOIN INNER LEFT RIGHT FULL OUTER " +
+                "ON AS CASE WHEN THEN ELSE END " +
+                "UNION INTERSECT EXCEPT DISTINCT ALL " +
+                "VALUES SET INTO " +
+                "BEGIN END COMMIT ROLLBACK SAVEPOINT " +
+                "FUNCTION PROCEDURE TRIGGER VIEW INDEX SEQUENCE " +
+                "PRIMARY KEY FOREIGN KEY REFERENCES CONSTRAINT " +
+                "INTEGER VARCHAR TEXT CHAR BOOLEAN DATE TIMESTAMP NUMERIC DECIMAL " +
+                "TRUE FALSE NULL " +
+                "IF EXISTS IF NOT EXISTS " +
+                "CASCADE RESTRICT";
+
+            scintilla.SetKeywords(0, sqlKeywords);
+
+            // Set PostgreSQL specific keywords
+            string sqlKeywords2 =
+                "SERIAL BIGSERIAL JSONB UUID " +
+                "CURRENT_TIMESTAMP CURRENT_DATE CURRENT_TIME " +
+                "NOW() " +
+                "RETURNS LANGUAGE PLPGSQL " +
+                "EXECUTE RAISE NOTICE EXCEPTION " +
+                "DO $$ $$ " +
+                "CONCURRENTLY " +
+                "ADD COLUMN DROP COLUMN RENAME COLUMN " +
+                "ALTER COLUMN TYPE " +
+                "WITHOUT TIME ZONE WITH TIME ZONE " +
+                "DEFAULT NOT NULL UNIQUE CHECK " +
+                "COMMENT ON TABLE COMMENT ON COLUMN " +
+                "GRANT REVOKE";
+
+            scintilla.SetKeywords(1, sqlKeywords2);
+
+            // Set margins for better appearance
+            scintilla.Margins[0].Width = 50;
+            scintilla.Margins[0].Sensitive = true;
+            scintilla.Margins[0].Type = MarginType.Number;
+
+            // Show current line indicator
+            scintilla.CaretLineVisible = true;
+            scintilla.CaretLineBackColor = System.Drawing.Color.FromArgb(255, 255, 240);
+
+            // Show white space (optional)
+            scintilla.ViewWhitespace = WhitespaceMode.Invisible;
+
+            // Enable scrolling
+            scintilla.ScrollWidth = 1;
+            scintilla.ScrollWidthTracking = true;
+
+            // Enable auto-completion (optional)
+            scintilla.AutoCChooseSingle = true;
+            scintilla.AutoCIgnoreCase = true;
+            scintilla.AutoCMaxHeight = 10;
+
+            // Enable right-click context menu
+            var contextMenu = new ContextMenuStrip();
+            contextMenu.Items.Add("Cut", null, (s, e) => scintilla.Cut());
+            contextMenu.Items.Add("Copy", null, (s, e) => scintilla.Copy());
+            contextMenu.Items.Add("Paste", null, (s, e) => scintilla.Paste());
+            contextMenu.Items.Add("-");
+            contextMenu.Items.Add("Select All", null, (s, e) => scintilla.SelectAll());
+            contextMenu.Items.Add("-");
+            contextMenu.Items.Add("Comment Line", null, (s, e) => CommentLine(scintilla));
+            contextMenu.Items.Add("Uncomment Line", null, (s, e) => UncommentLine(scintilla));
+            contextMenu.Items.Add("-");
+            contextMenu.Items.Add("Format SQL", null, (s, e) => FormatSql(scintilla));
+
+            scintilla.ContextMenuStrip = contextMenu;
+
+            // Add key handler for auto-indentation
+            scintilla.KeyDown += (s, e) =>
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    // Get current line
+                    int currentLine = scintilla.LineFromPosition(scintilla.CurrentPosition);
+                    string lineText = scintilla.Lines[currentLine].Text;
+
+                    // Count leading spaces/tabs
+                    int indentLevel = 0;
+                    foreach (char c in lineText)
+                    {
+                        if (c == ' ' || c == '\t')
+                            indentLevel++;
+                        else
+                            break;
+                    }
+
+                    // Insert new line with same indentation
+                    scintilla.ReplaceSelection("\n" + new string(' ', indentLevel));
+                    e.Handled = true;
+                }
+                else if (e.KeyCode == Keys.Tab && !e.Shift)
+                {
+                    // Insert 4 spaces on Tab
+                    scintilla.ReplaceSelection(new string(' ', 4));
+                    e.Handled = true;
+                }
+            };
+        }
+        //private void ConfigureScintillaEditor(Scintilla scintilla)
+        //{
+        //    // Reset default styles
+        //    scintilla.StyleResetDefault();
+
+        //    // Configure basic editor settings
+        //    scintilla.Lexer = Lexer.Sql;
+        //    scintilla.Margins[0].Width = 16; // Line number margin
+        //    scintilla.Margins[0].Type = MarginType.Number;
+
+        //    // Configure SQL lexer styles
+        //    scintilla.Styles[Style.Sql.Identifier].ForeColor = System.Drawing.Color.Black;
+        //    scintilla.Styles[Style.Sql.String].ForeColor = System.Drawing.Color.DarkRed;
+        //    scintilla.Styles[Style.Sql.QuotedIdentifier].ForeColor = System.Drawing.Color.DarkGreen;
+        //    scintilla.Styles[Style.Sql.Comment].ForeColor = System.Drawing.Color.Green;
+        //    scintilla.Styles[Style.Sql.CommentLine].ForeColor = System.Drawing.Color.Green;
+        //    scintilla.Styles[Style.Sql.CommentDoc].ForeColor = System.Drawing.Color.Green;
+        //    scintilla.Styles[Style.Sql.Number].ForeColor = System.Drawing.Color.DarkOrange;
+        //    scintilla.Styles[Style.Sql.Word].ForeColor = System.Drawing.Color.Blue;
+        //    scintilla.Styles[Style.Sql.Word2].ForeColor = System.Drawing.Color.DarkBlue;
+        //    scintilla.Styles[Style.Sql.Operator].ForeColor = System.Drawing.Color.DarkMagenta;
+
+        //    // Enable line wrapping
+        //    scintilla.WrapMode = WrapMode.Word;
+
+        //    // Show line numbers
+        //    scintilla.Margins[1].Width = 0; // Disable fold margin
+
+        //    // Set font
+        //    scintilla.Font = new System.Drawing.Font("Consolas", 10);
+
+        //    // Enable code folding
+        //    scintilla.SetProperty("fold", "1");
+        //    scintilla.SetProperty("fold.compact", "1");
+        //    scintilla.SetProperty("fold.sql", "1");
+
+        //    // Set folding markers
+        //    scintilla.Markers[Marker.Folder].Symbol = MarkerSymbol.BoxPlus;
+        //    scintilla.Markers[Marker.FolderOpen].Symbol = MarkerSymbol.BoxMinus;
+        //    scintilla.Markers[Marker.FolderEnd].Symbol = MarkerSymbol.BoxPlusConnected;
+        //    scintilla.Markers[Marker.FolderMidTail].Symbol = MarkerSymbol.TCorner;
+        //    scintilla.Markers[Marker.FolderOpenMid].Symbol = MarkerSymbol.BoxMinusConnected;
+        //    scintilla.Markers[Marker.FolderSub].Symbol = MarkerSymbol.VLine;
+        //    scintilla.Markers[Marker.FolderTail].Symbol = MarkerSymbol.LCorner;
+
+        //    // Auto-indentation
+        //    scintilla.AutoCIgnoreCase = true;
+        //    scintilla.AutoCIgnoreCase = true;
+        //    scintilla.IndentWidth = 4;
+
+        //    // Braces highlighting
+        //    scintilla.Styles[Style.BraceLight].BackColor = System.Drawing.Color.LightGray;
+        //    scintilla.Styles[Style.BraceLight].ForeColor = System.Drawing.Color.Black;
+        //    scintilla.Styles[Style.BraceBad].ForeColor = System.Drawing.Color.Red;
+
+        //    // Selection color
+        //    scintilla.SetSelectionBackColor(true, System.Drawing.Color.LightSteelBlue);
+
+        //    // Caret settings
+        //    scintilla.CaretForeColor = System.Drawing.Color.Black;
+        //    scintilla.CaretLineVisible = true;
+        //    scintilla.CaretLineBackColor = System.Drawing.Color.FromArgb(240, 240, 255);
+
+        //    // Enable right margin at 80 chars
+        //    scintilla.Margins[2].Width = 1;
+        //    scintilla.Margins[2].Type = MarginType.Color;
+        //    scintilla.Margins[2].BackColor = System.Drawing.Color.LightGray;
+        //    //scintilla.SetMarginWidthN(2, 0); // Initially hidden
+
+        //    // Set right margin at 120 chars
+        //    scintilla.Margins[3].Width = 1;
+        //    scintilla.Margins[3].Type = MarginType.Color;
+        //    scintilla.Margins[3].BackColor = System.Drawing.Color.FromArgb(255, 200, 200);
+        //    //scintilla.SetMarginWidthN(3, 0); // Initially hidden
+
+        //    // Set SQL keywords
+        //    string sqlKeywords =
+        //        "SELECT INSERT UPDATE DELETE CREATE ALTER DROP TRUNCATE TABLE " +
+        //        "FROM WHERE AND OR NOT LIKE IN BETWEEN IS NULL " +
+        //        "ORDER BY GROUP BY HAVING JOIN INNER LEFT RIGHT FULL OUTER " +
+        //        "ON AS CASE WHEN THEN ELSE END " +
+        //        "UNION INTERSECT EXCEPT DISTINCT ALL " +
+        //        "VALUES SET INTO " +
+        //        "BEGIN END COMMIT ROLLBACK SAVEPOINT " +
+        //        "FUNCTION PROCEDURE TRIGGER VIEW INDEX SEQUENCE " +
+        //        "PRIMARY KEY FOREIGN KEY REFERENCES CONSTRAINT " +
+        //        "INTEGER VARCHAR TEXT CHAR BOOLEAN DATE TIMESTAMP NUMERIC DECIMAL " +
+        //        "TRUE FALSE NULL " +
+        //        "IF EXISTS IF NOT EXISTS " +
+        //        "CASCADE RESTRICT";
+
+        //    scintilla.SetKeywords(0, sqlKeywords);
+
+        //    // Set PostgreSQL specific keywords
+        //    string sqlKeywords2 =
+        //        "SERIAL BIGSERIAL JSONB UUID " +
+        //        "CURRENT_TIMESTAMP CURRENT_DATE CURRENT_TIME " +
+        //        "NOW() " +
+        //        "RETURNS LANGUAGE PLPGSQL " +
+        //        "EXECUTE RAISE NOTICE EXCEPTION " +
+        //        "DO $$ $$ " +
+        //        "CONCURRENTLY " +
+        //        "ADD COLUMN DROP COLUMN RENAME COLUMN " +
+        //        "ALTER COLUMN TYPE " +
+        //        "WITHOUT TIME ZONE WITH TIME ZONE " +
+        //        "DEFAULT NOT NULL UNIQUE CHECK " +
+        //        "COMMENT ON TABLE COMMENT ON COLUMN " +
+        //        "GRANT REVOKE";
+
+        //    scintilla.SetKeywords(1, sqlKeywords2);
+
+        //    // Set margins for better appearance
+        //    scintilla.Margins[0].Width = 50;
+        //    scintilla.Margins[0].Sensitive = true;
+        //    scintilla.Margins[0].Type = MarginType.Number;
+
+        //    // Show current line indicator
+        //    scintilla.CaretLineVisible = true;
+        //    scintilla.CaretLineBackColor = System.Drawing.Color.FromArgb(255, 255, 240);
+
+        //    // Set tab settings
+        //    scintilla.UseTabs = false;
+        //    scintilla.TabWidth = 4;
+
+        //    // Show white space (optional)
+        //    scintilla.ViewWhitespace = WhitespaceMode.Invisible;
+
+        //    // Enable scrolling
+        //    scintilla.ScrollWidth = 1;
+        //    scintilla.ScrollWidthTracking = true;
+
+        //    // Enable right-click context menu
+        //    var contextMenu = new ContextMenuStrip();
+        //    contextMenu.Items.Add("Cut", null, (s, e) => scintilla.Cut());
+        //    contextMenu.Items.Add("Copy", null, (s, e) => scintilla.Copy());
+        //    contextMenu.Items.Add("Paste", null, (s, e) => scintilla.Paste());
+        //    contextMenu.Items.Add("-");
+        //    contextMenu.Items.Add("Select All", null, (s, e) => scintilla.SelectAll());
+        //    contextMenu.Items.Add("-");
+        //    contextMenu.Items.Add("Comment Line", null, (s, e) => CommentLine(scintilla));
+        //    contextMenu.Items.Add("Uncomment Line", null, (s, e) => UncommentLine(scintilla));
+        //    contextMenu.Items.Add("-");
+        //    contextMenu.Items.Add("Format SQL", null, (s, e) => FormatSql(scintilla));
+
+        //    scintilla.ContextMenuStrip = contextMenu;
+        //}
+
+        private void CommentLine(Scintilla scintilla)
+        {
+            int startPos = scintilla.SelectionStart;
+            int endPos = scintilla.SelectionEnd;
+
+            scintilla.ReplaceSelection("-- " + scintilla.GetTextRange(startPos, endPos - startPos));
+        }
+
+        private void UncommentLine(Scintilla scintilla)
+        {
+            string selectedText = scintilla.SelectedText;
+            if (selectedText.StartsWith("-- "))
+            {
+                scintilla.ReplaceSelection(selectedText.Substring(3));
+            }
+            else if (selectedText.StartsWith("--"))
+            {
+                scintilla.ReplaceSelection(selectedText.Substring(2));
+            }
+        }
+
+        private void FormatSql(Scintilla scintilla)
+        {
+            // Basic SQL formatting - you can enhance this with a proper SQL formatter
+            string text = scintilla.Text;
+
+            // Format common SQL patterns
+            text = text.Replace("SELECT ", "\nSELECT ")
+                      .Replace(" FROM ", "\nFROM ")
+                      .Replace(" WHERE ", "\nWHERE ")
+                      .Replace(" AND ", "\n    AND ")
+                      .Replace(" OR ", "\n    OR ")
+                      .Replace(" ORDER BY ", "\nORDER BY ")
+                      .Replace(" GROUP BY ", "\nGROUP BY ")
+                      .Replace(" HAVING ", "\nHAVING ")
+                      .Replace(" INSERT INTO ", "\nINSERT INTO ")
+                      .Replace(" VALUES ", "\nVALUES ")
+                      .Replace(" UPDATE ", "\nUPDATE ")
+                      .Replace(" SET ", "\nSET ")
+                      .Replace(" DELETE FROM ", "\nDELETE FROM ")
+                      .Replace(" CREATE TABLE ", "\nCREATE TABLE ")
+                      .Replace(" ALTER TABLE ", "\nALTER TABLE ")
+                      .Replace(" DROP TABLE ", "\nDROP TABLE ");
+
+            scintilla.Text = text;
         }
 
         // Load template files into combo
@@ -104,7 +469,6 @@ namespace PostgresMigrations
         }
 
         #region Helpers
-
         private string GetTargetSchema()
         {
             var sel = comboSchema.SelectedItem?.ToString() ?? "public";
@@ -120,8 +484,10 @@ namespace PostgresMigrations
             var sb = new StringBuilder();
             foreach (char c in name)
             {
-                if (char.IsLetterOrDigit(c) || c == '_') sb.Append(c);
-                else sb.Append('_');
+                if (char.IsLetterOrDigit(c) || c == '_')
+                    sb.Append(c);
+                else
+                    sb.Append('_');
             }
             return sb.ToString();
         }
@@ -216,7 +582,8 @@ BEGIN
     SELECT source_column1, source_column2
     FROM {placeholder}.source_table st
     WHERE NOT EXISTS (
-        SELECT 1 FROM {placeholder}.target_table tt 
+        SELECT 1 
+        FROM {placeholder}.target_table tt
         WHERE tt.column1 = st.source_column1
     );
     
@@ -229,7 +596,6 @@ END $$;
             return $@"-- Your SQL code for {schema} schema
 -- Use {placeholder} prefix for all objects
 -- Example: CREATE TABLE IF NOT EXISTS {placeholder}.table_name (...)
-
 DO $$
 BEGIN
     -- Your code with error handling
@@ -238,17 +604,15 @@ BEGIN
     -- Execute operations
     
     RAISE NOTICE 'Migration completed successfully';
-EXCEPTION
+EXCEPTION 
     WHEN others THEN
         RAISE EXCEPTION 'Error: %', SQLERRM;
 END $$;
 ";
         }
-
         #endregion
 
         #region Event Handlers (buttons + combos)
-
         private void comboSchema_SelectedIndexChanged(object sender, EventArgs e)
         {
             bool isCustom = comboSchema.SelectedItem?.ToString() == "custom";
@@ -261,11 +625,15 @@ END $$;
             string target = GetTargetSchema();
             if (string.IsNullOrWhiteSpace(target))
             {
-                MessageBox.Show("Please select or enter a schema!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select or enter a schema!", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            var template = GetSqlTemplateByType(comboType.SelectedItem?.ToString() ?? "CUSTOM", target);
+            var template = GetSqlTemplateByType(
+                comboType.SelectedItem?.ToString() ?? "CUSTOM",
+                target);
+
             template = template.Replace("{schema}", target);
 
             txtSqlUp.Text = template;
@@ -277,43 +645,41 @@ END $$;
             string migrationName = txtName.Text.Trim();
             if (string.IsNullOrWhiteSpace(migrationName))
             {
-                MessageBox.Show("Please enter migration name!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter migration name!", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             string targetSchema = GetTargetSchema();
             if (string.IsNullOrWhiteSpace(targetSchema))
             {
-                MessageBox.Show("Please select or enter a schema!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select or enter a schema!", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             string baseName = GetMigrationFileName(migrationName, targetSchema)
                 .Replace(".sql", "");
-
             string fileUp = baseName + "_UP.sql";
             string fileDown = baseName + "_DOWN.sql";
 
             string author = txtAuthor.Text.Trim();
             string comment = txtComment.Text.Trim();
-
-            string sqlUp = txtSqlUp.Text.Trim();
-            string sqlDown = txtSqlDown.Text.Trim();
+            string sqlUp = txtSqlUp.Text;
+            string sqlDown = txtSqlDown.Text;
 
             var sb = new StringBuilder();
             sb.AppendLine("=============================================");
-            sb.AppendLine("         MIGRATION PREVIEW (UP/DOWN)");
+            sb.AppendLine(" MIGRATION PREVIEW (UP/DOWN)");
             sb.AppendLine("=============================================");
-            sb.AppendLine($"UP File:   {fileUp}");
+            sb.AppendLine($"UP File: {fileUp}");
             sb.AppendLine($"DOWN File: {fileDown}");
             sb.AppendLine($"Schema: {targetSchema}");
             sb.AppendLine($"Author: {author}");
             sb.AppendLine($"Comment: {comment}");
             sb.AppendLine("=============================================");
-
             sb.AppendLine("\n========== UP SQL ==========\n");
             sb.AppendLine(sqlUp);
-
             sb.AppendLine("\n========== DOWN SQL ==========\n");
             sb.AppendLine(sqlDown);
 
@@ -323,43 +689,38 @@ END $$;
             }
         }
 
-        private string EscapeForSqlLiteral(string input)
-        {
-            if (input == null) return "";
-            return input.Replace("'", "''");
-        }
-
         private void btnCreate_Click(object sender, EventArgs e)
         {
             string migrationName = txtName.Text.Trim();
             if (string.IsNullOrWhiteSpace(migrationName))
             {
-                MessageBox.Show("Please enter migration name!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter migration name!", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             string targetSchema = GetTargetSchema();
             if (string.IsNullOrWhiteSpace(targetSchema))
             {
-                MessageBox.Show("Please select or enter a schema!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select or enter a schema!", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             string baseName = GetMigrationFileName(migrationName, targetSchema)
                 .Replace(".sql", "");
-
             string upFile = Path.Combine(PendingPath, baseName + "_UP.sql");
             string downFile = Path.Combine(PendingPath, baseName + "_DOWN.sql");
 
             string author = txtAuthor.Text.Trim();
             string comment = txtComment.Text.Trim();
-
-            string sqlUp = txtSqlUp.Text.Trim();
-            string sqlDown = txtSqlDown.Text.Trim();
+            string sqlUp = txtSqlUp.Text;
+            string sqlDown = txtSqlDown.Text;
 
             if (string.IsNullOrWhiteSpace(sqlUp))
             {
-                MessageBox.Show("UP SQL is empty!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("UP SQL is empty!", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -370,7 +731,6 @@ END $$;
                     "Warning",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning);
-
                 if (r == DialogResult.No) return;
             }
 
@@ -385,14 +745,17 @@ END $$;
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
 
-                Process.Start(new ProcessStartInfo("explorer.exe", $"\"{PendingPath}\"") { UseShellExecute = true });
+                Process.Start(new ProcessStartInfo("explorer.exe", $"\"{PendingPath}\"")
+                {
+                    UseShellExecute = true
+                });
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error saving files:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error saving files:\n{ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void btnClear_Click(object sender, EventArgs e)
         {
@@ -430,36 +793,43 @@ CREATE TABLE IF NOT EXISTS migrations.db_migrations (
     checksum VARCHAR(64),
     success BOOLEAN DEFAULT TRUE,
     notes TEXT,
-    
     -- Unique constraint for migration name and schema
     CONSTRAINT unique_migration_schema UNIQUE (migration_name, schema_name)
 );
 
 -- 3. Create indexes for performance
-CREATE INDEX IF NOT EXISTS idx_migrations_schema 
-ON migrations.db_migrations(schema_name);
+CREATE INDEX IF NOT EXISTS idx_migrations_schema ON migrations.db_migrations(schema_name);
 
 -- 4. Create comment
 COMMENT ON SCHEMA migrations IS 'Миграции';
 COMMENT ON TABLE migrations.db_migrations IS 'Центральная таблица со всеми миграциями в базе';
 
-RAISE NOTICE 'Migrations system initialized successfully!';";
+RAISE NOTICE 'Migrations system initialized successfully!';
+";
 
             string initPath = Path.Combine(MigrationsPath, "init_migrations_system.sql");
             try
             {
                 File.WriteAllText(initPath, initScript, Encoding.UTF8);
-                MessageBox.Show($"Initialization script generated!\n\nFile: {initPath}\n\nRun this script ONCE in your database to set up the migrations system.", "Init Script Generated", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                MessageBox.Show(
+                    $"Initialization script generated!\n\nFile: {initPath}\n\n" +
+                    "Run this script ONCE in your database to set up the migrations system.",
+                    "Init Script Generated",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
                 try
                 {
-                    Process.Start(new ProcessStartInfo("notepad.exe", $"\"{initPath}\"") { UseShellExecute = true });
+                    Process.Start(new ProcessStartInfo("notepad.exe", $"\"{initPath}\"")
+                    {
+                        UseShellExecute = true
+                    });
                 }
                 catch { }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error creating init script:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error creating init script:\n{ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -477,11 +847,11 @@ RAISE NOTICE 'Migrations system initialized successfully!';";
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Unable to load template: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Unable to load template: {ex.Message}", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
-
         #endregion
     }
 }
