@@ -32,8 +32,6 @@ namespace PostgresMigrations
             Directory.CreateDirectory(TemplatesPath);
             Directory.CreateDirectory(SchemasPath);
 
-            LoadTemplates();
-
             // Initialize UI defaults
             comboSchema.Items.AddRange(new object[] { "policyregistry", "users_schema", "public", "custom" });
             comboSchema.SelectedIndex = 0;
@@ -291,38 +289,6 @@ namespace PostgresMigrations
             scintilla.Text = text;
         }
 
-        // Load template files into combo
-        private void LoadTemplates()
-        {
-            try
-            {
-                var files = Directory.GetFiles(TemplatesPath, "*.sql");
-                if (files.Length > 0)
-                {
-                    comboTemplates.Items.Clear();
-                    comboTemplates.Items.Add("-- Select template --");
-                    foreach (var f in files)
-                    {
-                        comboTemplates.Items.Add(Path.GetFileName(f));
-                    }
-                    comboTemplates.SelectedIndex = 0;
-                    comboTemplates.Visible = true;
-                    labelLoadTemplate.Visible = true;
-                    btnLoadTemplate.Visible = true;
-                }
-                else
-                {
-                    comboTemplates.Visible = false;
-                    labelLoadTemplate.Visible = false;
-                    btnLoadTemplate.Visible = false;
-                }
-            }
-            catch
-            {
-                // ignore template loading errors
-            }
-        }
-
         #region Helpers
         private string GetTargetSchema()
         {
@@ -505,56 +471,21 @@ END $$;
             txtSqlDown.Text = "-- Write DOWN migration here\n-- Inverse of UP script";
         }
 
-        private void btnPreview_Click(object sender, EventArgs e)
+        private string EscapeForSqlLiteral(string input)
         {
-            string migrationName = txtName.Text.Trim();
-            if (string.IsNullOrWhiteSpace(migrationName))
-            {
-                MessageBox.Show("Please enter migration name!", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            if (input == null) return "";
 
-            string targetSchema = GetTargetSchema();
-            if (string.IsNullOrWhiteSpace(targetSchema))
-            {
-                MessageBox.Show("Please select or enter a schema!", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            string baseName = GetMigrationFileName(migrationName, targetSchema)
-                .Replace(".sql", "");
-            string fileUp = baseName + "_UP.sql";
-            string fileDown = baseName + "_DOWN.sql";
-
-            string author = txtAuthor.Text.Trim();
-            string comment = txtComment.Text.Trim();
-            string sqlUp = txtSqlUp.Text;
-            string sqlDown = txtSqlDown.Text;
-
-            var sb = new StringBuilder();
-            sb.AppendLine("=============================================");
-            sb.AppendLine(" MIGRATION PREVIEW (UP/DOWN)");
-            sb.AppendLine("=============================================");
-            sb.AppendLine($"UP File: {fileUp}");
-            sb.AppendLine($"DOWN File: {fileDown}");
-            sb.AppendLine($"Schema: {targetSchema}");
-            sb.AppendLine($"Author: {author}");
-            sb.AppendLine($"Comment: {comment}");
-            sb.AppendLine("=============================================");
-            sb.AppendLine("\n========== UP SQL ==========\n");
-            sb.AppendLine(sqlUp);
-            sb.AppendLine("\n========== DOWN SQL ==========\n");
-            sb.AppendLine(sqlDown);
-
-            using (var preview = new FormPreview(sb.ToString()))
-            {
-                preview.ShowDialog(this);
-            }
+            // Экранирование одинарных кавычек для SQL
+            return input.Replace("'", "''");
         }
 
-        private void btnCreate_Click(object sender, EventArgs e)
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+        #endregion
+
+        private void createMirgationFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string migrationName = txtName.Text.Trim();
             if (string.IsNullOrWhiteSpace(migrationName))
@@ -787,16 +718,58 @@ END $$;
             }
         }
 
-        private string EscapeForSqlLiteral(string input)
+        private void previewToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (input == null) return "";
+            string migrationName = txtName.Text.Trim();
+            if (string.IsNullOrWhiteSpace(migrationName))
+            {
+                MessageBox.Show("Please enter migration name!", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            // Экранирование одинарных кавычек для SQL
-            return input.Replace("'", "''");
+            string targetSchema = GetTargetSchema();
+            if (string.IsNullOrWhiteSpace(targetSchema))
+            {
+                MessageBox.Show("Please select or enter a schema!", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string baseName = GetMigrationFileName(migrationName, targetSchema)
+                .Replace(".sql", "");
+            string fileUp = baseName + "_UP.sql";
+            string fileDown = baseName + "_DOWN.sql";
+
+            string author = txtAuthor.Text.Trim();
+            string comment = txtComment.Text.Trim();
+            string sqlUp = txtSqlUp.Text;
+            string sqlDown = txtSqlDown.Text;
+
+            var sb = new StringBuilder();
+            sb.AppendLine("=============================================");
+            sb.AppendLine(" MIGRATION PREVIEW (UP/DOWN)");
+            sb.AppendLine("=============================================");
+            sb.AppendLine($"UP File: {fileUp}");
+            sb.AppendLine($"DOWN File: {fileDown}");
+            sb.AppendLine($"Schema: {targetSchema}");
+            sb.AppendLine($"Author: {author}");
+            sb.AppendLine($"Comment: {comment}");
+            sb.AppendLine("=============================================");
+            sb.AppendLine("\n========== UP SQL ==========\n");
+            sb.AppendLine(sqlUp);
+            sb.AppendLine("\n========== DOWN SQL ==========\n");
+            sb.AppendLine(sqlDown);
+
+            using (var preview = new FormPreview(sb.ToString()))
+            {
+                preview.ShowDialog(this);
+            }
         }
 
-        private void btnClear_Click(object sender, EventArgs e)
+        private void previewToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
             txtName.Text = "";
             txtSqlUp.Text = @"-- Write UP migration here";
             txtSqlDown.Text = @"-- Write DOWN migration here";
@@ -806,12 +779,7 @@ END $$;
             txtCustomSchema.Text = "";
         }
 
-        private void btnExit_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        private void btnGenerateInit_Click(object sender, EventArgs e)
+        private void generateSchemaInitScriptToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string initScript = @"-- =============================================
 -- INITIALIZATION SCRIPT FOR MIGRATIONS SYSTEM
@@ -870,26 +838,5 @@ RAISE NOTICE 'Migrations system initialized successfully!';
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        private void btnLoadTemplate_Click(object sender, EventArgs e)
-        {
-            if (comboTemplates.SelectedIndex > 0)
-            {
-                string selected = comboTemplates.SelectedItem.ToString();
-                string path = Path.Combine(TemplatesPath, selected);
-                try
-                {
-                    string content = File.ReadAllText(path, Encoding.UTF8);
-                    txtSqlUp.Text = content;
-                    txtSqlDown.Text = "-- Write DOWN migration here";
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Unable to load template: {ex.Message}", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-        #endregion
     }
 }

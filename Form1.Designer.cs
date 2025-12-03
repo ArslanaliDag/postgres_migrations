@@ -6,8 +6,6 @@ namespace PostgresMigrations
     partial class Form1
     {
         private System.ComponentModel.IContainer components = null;
-        private Label titleLabel;
-        private Label separator1;
         private Label labelSchema;
         private ComboBox comboSchema;
         private Label labelCustomSchema;
@@ -22,19 +20,6 @@ namespace PostgresMigrations
         private TextBox txtComment;
         private Label section3Label;
         private ComboBox comboType;
-        private Label section4UpLabel;
-        private Scintilla txtSqlUp;
-        private Label section4DownLabel;
-        private Scintilla txtSqlDown;
-        private Button btnInsertTemplate;
-        private Panel buttonPanel;
-        private Button btnCreate;
-        private Button btnPreview;
-        private Button btnClear;
-        private Label labelLoadTemplate;
-        private ComboBox comboTemplates;
-        private Button btnLoadTemplate;
-        private Button btnGenerateInit;
 
         protected override void Dispose(bool disposing)
         {
@@ -46,8 +31,6 @@ namespace PostgresMigrations
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.titleLabel = new System.Windows.Forms.Label();
-            this.separator1 = new System.Windows.Forms.Label();
             this.labelSchema = new System.Windows.Forms.Label();
             this.comboSchema = new System.Windows.Forms.ComboBox();
             this.labelCustomSchema = new System.Windows.Forms.Label();
@@ -62,48 +45,28 @@ namespace PostgresMigrations
             this.txtComment = new System.Windows.Forms.TextBox();
             this.section3Label = new System.Windows.Forms.Label();
             this.comboType = new System.Windows.Forms.ComboBox();
-            this.btnInsertTemplate = new System.Windows.Forms.Button();
-            this.buttonPanel = new System.Windows.Forms.Panel();
-            this.btnGenerateInit = new System.Windows.Forms.Button();
-            this.btnCreate = new System.Windows.Forms.Button();
-            this.btnPreview = new System.Windows.Forms.Button();
-            this.btnClear = new System.Windows.Forms.Button();
-            this.labelLoadTemplate = new System.Windows.Forms.Label();
-            this.comboTemplates = new System.Windows.Forms.ComboBox();
-            this.btnLoadTemplate = new System.Windows.Forms.Button();
-            this.section4UpLabel = new System.Windows.Forms.Label();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
             this.txtSqlUp = new ScintillaNET.Scintilla();
-            this.section4DownLabel = new System.Windows.Forms.Label();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.txtSqlDown = new ScintillaNET.Scintilla();
-            this.buttonPanel.SuspendLayout();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.createMigrationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createMirgationFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.previewToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.generateSchemaInitScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.previewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // titleLabel
-            // 
-            this.titleLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.titleLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.titleLabel.ForeColor = System.Drawing.Color.DarkBlue;
-            this.titleLabel.Location = new System.Drawing.Point(20, 12);
-            this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(940, 30);
-            this.titleLabel.TabIndex = 0;
-            this.titleLabel.Text = "CREATE DATABASE MIGRATION";
-            // 
-            // separator1
-            // 
-            this.separator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.separator1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.separator1.Location = new System.Drawing.Point(20, 50);
-            this.separator1.Name = "separator1";
-            this.separator1.Size = new System.Drawing.Size(940, 2);
-            this.separator1.TabIndex = 1;
             // 
             // labelSchema
             // 
             this.labelSchema.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.labelSchema.Location = new System.Drawing.Point(20, 70);
+            this.labelSchema.Location = new System.Drawing.Point(20, 28);
             this.labelSchema.Name = "labelSchema";
             this.labelSchema.Size = new System.Drawing.Size(200, 25);
             this.labelSchema.TabIndex = 2;
@@ -112,7 +75,7 @@ namespace PostgresMigrations
             // comboSchema
             // 
             this.comboSchema.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboSchema.Location = new System.Drawing.Point(200, 70);
+            this.comboSchema.Location = new System.Drawing.Point(200, 28);
             this.comboSchema.Name = "comboSchema";
             this.comboSchema.Size = new System.Drawing.Size(178, 25);
             this.comboSchema.TabIndex = 3;
@@ -120,7 +83,7 @@ namespace PostgresMigrations
             // 
             // labelCustomSchema
             // 
-            this.labelCustomSchema.Location = new System.Drawing.Point(392, 70);
+            this.labelCustomSchema.Location = new System.Drawing.Point(392, 28);
             this.labelCustomSchema.Name = "labelCustomSchema";
             this.labelCustomSchema.Size = new System.Drawing.Size(114, 25);
             this.labelCustomSchema.TabIndex = 4;
@@ -131,7 +94,7 @@ namespace PostgresMigrations
             // 
             this.txtCustomSchema.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCustomSchema.Location = new System.Drawing.Point(507, 69);
+            this.txtCustomSchema.Location = new System.Drawing.Point(507, 27);
             this.txtCustomSchema.Name = "txtCustomSchema";
             this.txtCustomSchema.Size = new System.Drawing.Size(150, 25);
             this.txtCustomSchema.TabIndex = 5;
@@ -140,7 +103,7 @@ namespace PostgresMigrations
             // section2Label
             // 
             this.section2Label.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.section2Label.Location = new System.Drawing.Point(20, 110);
+            this.section2Label.Location = new System.Drawing.Point(20, 68);
             this.section2Label.Name = "section2Label";
             this.section2Label.Size = new System.Drawing.Size(300, 25);
             this.section2Label.TabIndex = 6;
@@ -148,7 +111,7 @@ namespace PostgresMigrations
             // 
             // labelName
             // 
-            this.labelName.Location = new System.Drawing.Point(40, 145);
+            this.labelName.Location = new System.Drawing.Point(40, 103);
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(150, 25);
             this.labelName.TabIndex = 7;
@@ -159,7 +122,7 @@ namespace PostgresMigrations
             this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtName.Font = new System.Drawing.Font("Consolas", 10F);
-            this.txtName.Location = new System.Drawing.Point(200, 145);
+            this.txtName.Location = new System.Drawing.Point(200, 103);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(400, 23);
             this.txtName.TabIndex = 8;
@@ -170,7 +133,7 @@ namespace PostgresMigrations
             | System.Windows.Forms.AnchorStyles.Right)));
             this.nameHint.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.nameHint.ForeColor = System.Drawing.Color.Gray;
-            this.nameHint.Location = new System.Drawing.Point(610, 145);
+            this.nameHint.Location = new System.Drawing.Point(610, 103);
             this.nameHint.Name = "nameHint";
             this.nameHint.Size = new System.Drawing.Size(300, 25);
             this.nameHint.TabIndex = 9;
@@ -178,7 +141,7 @@ namespace PostgresMigrations
             // 
             // labelAuthor
             // 
-            this.labelAuthor.Location = new System.Drawing.Point(40, 185);
+            this.labelAuthor.Location = new System.Drawing.Point(40, 143);
             this.labelAuthor.Name = "labelAuthor";
             this.labelAuthor.Size = new System.Drawing.Size(150, 25);
             this.labelAuthor.TabIndex = 10;
@@ -189,14 +152,14 @@ namespace PostgresMigrations
             this.txtAuthor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtAuthor.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtAuthor.Location = new System.Drawing.Point(200, 185);
+            this.txtAuthor.Location = new System.Drawing.Point(200, 143);
             this.txtAuthor.Name = "txtAuthor";
             this.txtAuthor.Size = new System.Drawing.Size(400, 25);
             this.txtAuthor.TabIndex = 11;
             // 
             // labelComment
             // 
-            this.labelComment.Location = new System.Drawing.Point(40, 225);
+            this.labelComment.Location = new System.Drawing.Point(40, 183);
             this.labelComment.Name = "labelComment";
             this.labelComment.Size = new System.Drawing.Size(150, 25);
             this.labelComment.TabIndex = 12;
@@ -207,7 +170,7 @@ namespace PostgresMigrations
             this.txtComment.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtComment.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtComment.Location = new System.Drawing.Point(200, 225);
+            this.txtComment.Location = new System.Drawing.Point(200, 183);
             this.txtComment.Name = "txtComment";
             this.txtComment.Size = new System.Drawing.Size(650, 25);
             this.txtComment.TabIndex = 13;
@@ -215,7 +178,7 @@ namespace PostgresMigrations
             // section3Label
             // 
             this.section3Label.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.section3Label.Location = new System.Drawing.Point(20, 265);
+            this.section3Label.Location = new System.Drawing.Point(20, 223);
             this.section3Label.Name = "section3Label";
             this.section3Label.Size = new System.Drawing.Size(300, 25);
             this.section3Label.TabIndex = 14;
@@ -226,168 +189,130 @@ namespace PostgresMigrations
             this.comboType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.comboType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboType.Location = new System.Drawing.Point(40, 300);
+            this.comboType.Location = new System.Drawing.Point(40, 258);
             this.comboType.Name = "comboType";
             this.comboType.Size = new System.Drawing.Size(800, 25);
             this.comboType.TabIndex = 15;
             // 
-            // btnInsertTemplate
+            // tabControl1
             // 
-            this.btnInsertTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnInsertTemplate.BackColor = System.Drawing.Color.LightGray;
-            this.btnInsertTemplate.Location = new System.Drawing.Point(40, 745);
-            this.btnInsertTemplate.Name = "btnInsertTemplate";
-            this.btnInsertTemplate.Size = new System.Drawing.Size(150, 30);
-            this.btnInsertTemplate.TabIndex = 18;
-            this.btnInsertTemplate.Text = "Insert Template";
-            this.btnInsertTemplate.UseVisualStyleBackColor = false;
-            this.btnInsertTemplate.Click += new System.EventHandler(this.btnInsertTemplate_Click);
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Location = new System.Drawing.Point(0, 305);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(984, 404);
+            this.tabControl1.TabIndex = 20;
             // 
-            // buttonPanel
+            // tabPage1
             // 
-            this.buttonPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonPanel.Controls.Add(this.btnGenerateInit);
-            this.buttonPanel.Controls.Add(this.btnCreate);
-            this.buttonPanel.Controls.Add(this.btnPreview);
-            this.buttonPanel.Controls.Add(this.btnClear);
-            this.buttonPanel.Location = new System.Drawing.Point(0, 793);
-            this.buttonPanel.Name = "buttonPanel";
-            this.buttonPanel.Size = new System.Drawing.Size(984, 67);
-            this.buttonPanel.TabIndex = 19;
-            // 
-            // btnGenerateInit
-            // 
-            this.btnGenerateInit.BackColor = System.Drawing.Color.DarkOrange;
-            this.btnGenerateInit.ForeColor = System.Drawing.Color.White;
-            this.btnGenerateInit.Location = new System.Drawing.Point(521, 9);
-            this.btnGenerateInit.Name = "btnGenerateInit";
-            this.btnGenerateInit.Size = new System.Drawing.Size(150, 40);
-            this.btnGenerateInit.TabIndex = 0;
-            this.btnGenerateInit.Text = "Generate Init Script";
-            this.btnGenerateInit.UseVisualStyleBackColor = false;
-            this.btnGenerateInit.Click += new System.EventHandler(this.btnGenerateInit_Click);
-            // 
-            // btnCreate
-            // 
-            this.btnCreate.BackColor = System.Drawing.Color.ForestGreen;
-            this.btnCreate.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnCreate.ForeColor = System.Drawing.Color.White;
-            this.btnCreate.Location = new System.Drawing.Point(40, 9);
-            this.btnCreate.Name = "btnCreate";
-            this.btnCreate.Size = new System.Drawing.Size(150, 40);
-            this.btnCreate.TabIndex = 0;
-            this.btnCreate.Text = "Create Migration";
-            this.btnCreate.UseVisualStyleBackColor = false;
-            this.btnCreate.Click += new System.EventHandler(this.btnCreate_Click);
-            // 
-            // btnPreview
-            // 
-            this.btnPreview.BackColor = System.Drawing.Color.SteelBlue;
-            this.btnPreview.ForeColor = System.Drawing.Color.White;
-            this.btnPreview.Location = new System.Drawing.Point(200, 9);
-            this.btnPreview.Name = "btnPreview";
-            this.btnPreview.Size = new System.Drawing.Size(150, 40);
-            this.btnPreview.TabIndex = 1;
-            this.btnPreview.Text = "Preview";
-            this.btnPreview.UseVisualStyleBackColor = false;
-            this.btnPreview.Click += new System.EventHandler(this.btnPreview_Click);
-            // 
-            // btnClear
-            // 
-            this.btnClear.BackColor = System.Drawing.Color.OrangeRed;
-            this.btnClear.ForeColor = System.Drawing.Color.White;
-            this.btnClear.Location = new System.Drawing.Point(360, 9);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(150, 40);
-            this.btnClear.TabIndex = 2;
-            this.btnClear.Text = "Clear";
-            this.btnClear.UseVisualStyleBackColor = false;
-            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
-            // 
-            // labelLoadTemplate
-            // 
-            this.labelLoadTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelLoadTemplate.Location = new System.Drawing.Point(218, 746);
-            this.labelLoadTemplate.Name = "labelLoadTemplate";
-            this.labelLoadTemplate.Size = new System.Drawing.Size(104, 30);
-            this.labelLoadTemplate.TabIndex = 0;
-            this.labelLoadTemplate.Text = "Load template:";
-            this.labelLoadTemplate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // comboTemplates
-            // 
-            this.comboTemplates.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboTemplates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboTemplates.Location = new System.Drawing.Point(328, 750);
-            this.comboTemplates.Name = "comboTemplates";
-            this.comboTemplates.Size = new System.Drawing.Size(300, 25);
-            this.comboTemplates.TabIndex = 1;
-            // 
-            // btnLoadTemplate
-            // 
-            this.btnLoadTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLoadTemplate.BackColor = System.Drawing.Color.LightBlue;
-            this.btnLoadTemplate.Location = new System.Drawing.Point(643, 747);
-            this.btnLoadTemplate.Name = "btnLoadTemplate";
-            this.btnLoadTemplate.Size = new System.Drawing.Size(100, 30);
-            this.btnLoadTemplate.TabIndex = 2;
-            this.btnLoadTemplate.Text = "Load";
-            this.btnLoadTemplate.UseVisualStyleBackColor = false;
-            this.btnLoadTemplate.Click += new System.EventHandler(this.btnLoadTemplate_Click);
-            // 
-            // section4UpLabel
-            // 
-            this.section4UpLabel.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.section4UpLabel.Location = new System.Drawing.Point(20, 340);
-            this.section4UpLabel.Name = "section4UpLabel";
-            this.section4UpLabel.Size = new System.Drawing.Size(300, 25);
-            this.section4UpLabel.TabIndex = 0;
-            this.section4UpLabel.Text = "4. SQL Migration Code (UP)";
+            this.tabPage1.Controls.Add(this.txtSqlUp);
+            this.tabPage1.Location = new System.Drawing.Point(4, 26);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(976, 374);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "4. SQL Migration Code (UP)";
+            this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // txtSqlUp
             // 
-            this.txtSqlUp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSqlUp.Location = new System.Drawing.Point(40, 368);
+            this.txtSqlUp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSqlUp.Location = new System.Drawing.Point(3, 3);
             this.txtSqlUp.Name = "txtSqlUp";
-            this.txtSqlUp.Size = new System.Drawing.Size(910, 166);
-            this.txtSqlUp.TabIndex = 1;
+            this.txtSqlUp.Size = new System.Drawing.Size(970, 368);
+            this.txtSqlUp.TabIndex = 2;
             // 
-            // section4DownLabel
+            // tabPage2
             // 
-            this.section4DownLabel.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.section4DownLabel.Location = new System.Drawing.Point(20, 547);
-            this.section4DownLabel.Name = "section4DownLabel";
-            this.section4DownLabel.Size = new System.Drawing.Size(300, 25);
-            this.section4DownLabel.TabIndex = 2;
-            this.section4DownLabel.Text = "5. SQL Migration Code (DOWN)";
+            this.tabPage2.Controls.Add(this.txtSqlDown);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(976, 378);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "5. SQL Migration Code (DOWN)";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // txtSqlDown
             // 
-            this.txtSqlDown.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSqlDown.Location = new System.Drawing.Point(40, 576);
+            this.txtSqlDown.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSqlDown.Location = new System.Drawing.Point(3, 3);
             this.txtSqlDown.Name = "txtSqlDown";
-            this.txtSqlDown.Size = new System.Drawing.Size(910, 160);
-            this.txtSqlDown.TabIndex = 3;
+            this.txtSqlDown.Size = new System.Drawing.Size(970, 372);
+            this.txtSqlDown.TabIndex = 4;
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createMigrationToolStripMenuItem,
+            this.previewToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(984, 24);
+            this.menuStrip1.TabIndex = 21;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // createMigrationToolStripMenuItem
+            // 
+            this.createMigrationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createMirgationFilesToolStripMenuItem,
+            this.previewToolStripMenuItem1,
+            this.generateSchemaInitScriptToolStripMenuItem});
+            this.createMigrationToolStripMenuItem.Name = "createMigrationToolStripMenuItem";
+            this.createMigrationToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
+            this.createMigrationToolStripMenuItem.Text = "Migration";
+            // 
+            // createMirgationFilesToolStripMenuItem
+            // 
+            this.createMirgationFilesToolStripMenuItem.Name = "createMirgationFilesToolStripMenuItem";
+            this.createMirgationFilesToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
+            this.createMirgationFilesToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.createMirgationFilesToolStripMenuItem.Text = "Create mirgations files";
+            this.createMirgationFilesToolStripMenuItem.Click += new System.EventHandler(this.createMirgationFilesToolStripMenuItem_Click);
+            // 
+            // previewToolStripMenuItem1
+            // 
+            this.previewToolStripMenuItem1.Name = "previewToolStripMenuItem1";
+            this.previewToolStripMenuItem1.Size = new System.Drawing.Size(234, 22);
+            this.previewToolStripMenuItem1.Text = "Preview migration";
+            this.previewToolStripMenuItem1.Visible = false;
+            this.previewToolStripMenuItem1.Click += new System.EventHandler(this.previewToolStripMenuItem1_Click);
+            // 
+            // generateSchemaInitScriptToolStripMenuItem
+            // 
+            this.generateSchemaInitScriptToolStripMenuItem.Name = "generateSchemaInitScriptToolStripMenuItem";
+            this.generateSchemaInitScriptToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.generateSchemaInitScriptToolStripMenuItem.Text = "Generate Schema Init Script";
+            this.generateSchemaInitScriptToolStripMenuItem.Click += new System.EventHandler(this.generateSchemaInitScriptToolStripMenuItem_Click);
+            // 
+            // previewToolStripMenuItem
+            // 
+            this.previewToolStripMenuItem.Name = "previewToolStripMenuItem";
+            this.previewToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
+            this.previewToolStripMenuItem.Text = "Clear";
+            this.previewToolStripMenuItem.Click += new System.EventHandler(this.previewToolStripMenuItem_Click);
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Location = new System.Drawing.Point(0, 712);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(984, 22);
+            this.statusStrip1.TabIndex = 22;
+            this.statusStrip1.Text = "statusStrip1";
             // 
             // Form1
             // 
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(984, 860);
+            this.ClientSize = new System.Drawing.Size(984, 734);
+            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.txtCustomSchema);
             this.Controls.Add(this.comboSchema);
             this.Controls.Add(this.labelCustomSchema);
-            this.Controls.Add(this.section4UpLabel);
-            this.Controls.Add(this.txtSqlUp);
-            this.Controls.Add(this.section4DownLabel);
-            this.Controls.Add(this.txtSqlDown);
-            this.Controls.Add(this.labelLoadTemplate);
-            this.Controls.Add(this.comboTemplates);
-            this.Controls.Add(this.btnLoadTemplate);
-            this.Controls.Add(this.titleLabel);
-            this.Controls.Add(this.separator1);
             this.Controls.Add(this.labelSchema);
             this.Controls.Add(this.section2Label);
             this.Controls.Add(this.labelName);
@@ -399,17 +324,34 @@ namespace PostgresMigrations
             this.Controls.Add(this.txtComment);
             this.Controls.Add(this.section3Label);
             this.Controls.Add(this.comboType);
-            this.Controls.Add(this.btnInsertTemplate);
-            this.Controls.Add(this.buttonPanel);
+            this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Database Migration Creator v1.0";
-            this.buttonPanel.ResumeLayout(false);
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
+
+        private TabControl tabControl1;
+        private TabPage tabPage1;
+        private Scintilla txtSqlUp;
+        private TabPage tabPage2;
+        private Scintilla txtSqlDown;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem createMigrationToolStripMenuItem;
+        private ToolStripMenuItem createMirgationFilesToolStripMenuItem;
+        private ToolStripMenuItem previewToolStripMenuItem1;
+        private ToolStripMenuItem generateSchemaInitScriptToolStripMenuItem;
+        private ToolStripMenuItem previewToolStripMenuItem;
+        private StatusStrip statusStrip1;
     }
 }
