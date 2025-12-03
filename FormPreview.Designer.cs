@@ -10,7 +10,6 @@ namespace PostgresMigrations
         /// 
 
         private TextBox txtPreview;
-        private Button btnOk;
 
         private System.ComponentModel.IContainer components = null;
 
@@ -29,28 +28,33 @@ namespace PostgresMigrations
 
         private void InitializeComponent()
         {
+            this.txtPreview = new System.Windows.Forms.TextBox();
+            this.SuspendLayout();
+            // 
+            // txtPreview
+            // 
+            this.txtPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtPreview.Font = new System.Drawing.Font("Consolas", 9F);
+            this.txtPreview.Location = new System.Drawing.Point(10, 10);
+            this.txtPreview.Multiline = true;
+            this.txtPreview.Name = "txtPreview";
+            this.txtPreview.ReadOnly = true;
+            this.txtPreview.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtPreview.Size = new System.Drawing.Size(810, 579);
+            this.txtPreview.TabIndex = 0;
+            // 
+            // FormPreview
+            // 
+            this.ClientSize = new System.Drawing.Size(834, 601);
+            this.Controls.Add(this.txtPreview);
+            this.Name = "FormPreview";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Migration Preview";
-            this.Width = 850;
-            this.Height = 640;
-            this.StartPosition = FormStartPosition.CenterParent;
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-            txtPreview = new TextBox();
-            txtPreview.Location = new System.Drawing.Point(10, 10);
-            txtPreview.Size = new System.Drawing.Size(810, 540);
-            txtPreview.Multiline = true;
-            txtPreview.ScrollBars = ScrollBars.Both;
-            txtPreview.Font = new System.Drawing.Font("Consolas", 9);
-            txtPreview.ReadOnly = true;
-            txtPreview.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            this.Controls.Add(txtPreview);
-
-            btnOk = new Button();
-            btnOk.Location = new System.Drawing.Point((this.ClientSize.Width - 100) / 2, 560);
-            btnOk.Size = new System.Drawing.Size(100, 30);
-            btnOk.Text = "OK";
-            btnOk.Anchor = AnchorStyles.Bottom;
-            btnOk.Click += (s, e) => { this.DialogResult = DialogResult.OK; this.Close(); };
-            this.Controls.Add(btnOk);
         }
     }
 }
