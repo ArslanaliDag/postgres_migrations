@@ -347,13 +347,22 @@ namespace PostgresMigrations
             return sb.ToString();
         }
 
+        //private string GetMigrationFileName(string name, string schema)
+        //{
+        //    string date = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+        //    string safeName = GetSafeName(name);
+        //    string safeSchema = GetSafeName(schema);
+        //    //return $"{date}_{safeSchema}_{safeName}.sql";
+        //    return $"{date}_{safeSchema}_{safeName}"; // Без .sql в конце
+        //}
+
         private string GetMigrationFileName(string name, string schema)
         {
             string date = DateTime.Now.ToString("yyyyMMdd_HHmmss");
             string safeName = GetSafeName(name);
-            string safeSchema = GetSafeName(schema);
-            //return $"{date}_{safeSchema}_{safeName}.sql";
-            return $"{date}_{safeSchema}_{safeName}"; // Без .sql в конце
+
+            // Формат: yyyyMMdd_HHmmss_migrationname
+            return $"{date}_{safeName}";
         }
 
         // Template text provider similar to PowerShell Get-SQLTemplate
@@ -759,14 +768,16 @@ END $$;
                     });
 
                     // Open only UP file (DOWN is for rollback)
-                    Process.Start(new ProcessStartInfo("notepad.exe", $"\"{upFile}\"")
-                    {
-                        UseShellExecute = true
-                    });
+                    //Process.Start(new ProcessStartInfo("notepad.exe", $"\"{upFile}\"")
+                    //{
+                    //    UseShellExecute = true
+                    //});
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // ignore process start errors
+                    MessageBox.Show($"Migration created error!:\n{ex.Message}", "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
