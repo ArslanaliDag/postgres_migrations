@@ -24,36 +24,51 @@ namespace PostgresMigrations
             SchemasPath = Path.Combine(MigrationsPath, "schemas");
             CurrentUser = Environment.UserName;
 
-            LoadTemplates();
-
             // Ensure folders
             Directory.CreateDirectory(MigrationsPath);
             Directory.CreateDirectory(PendingPath);
             Directory.CreateDirectory(TemplatesPath);
             Directory.CreateDirectory(SchemasPath);
 
+            LoadTemplates();
+
             // Initialize UI defaults
-            comboSchema.Items.AddRange(new object[] { "policyregistry", "users_schema", "public", "custom" });
+            comboSchema.Items.AddRange(new object[] {
+        "policyregistry",
+        "users_schema",
+        "public",
+        "custom"
+    });
             comboSchema.SelectedIndex = 0;
 
             comboType.Items.AddRange(new object[] {
-                "CREATE TABLE - Create new table",
-                "ALTER TABLE - Modify table",
-                "CREATE FUNCTION - Create function",
-                "CREATE INDEX - Create index",
-                "CREATE SCHEMA - Create schema",
-                "DATA MIGRATION - Data migration",
-                "CUSTOM - Custom SQL"
-            });
+        "CREATE TABLE - Create new table",
+        "ALTER TABLE - Modify table",
+        "CREATE FUNCTION - Create function",
+        "CREATE INDEX - Create index",
+        "CREATE SCHEMA - Create schema",
+        "DATA MIGRATION - Data migration",
+        "CUSTOM - Custom SQL"
+    });
             comboType.SelectedIndex = 0;
 
             txtAuthor.Text = CurrentUser;
             txtName.Text = "add_new_column";
             txtComment.Text = "Added new field for storing information";
-            txtSql.Font = new System.Drawing.Font("Consolas", 10);
-            txtSql.Text = @"-- Write your SQL code here
--- Use schema prefix for all objects: {schema}.table_name
--- Example: CREATE TABLE IF NOT EXISTS {schema}.table_name (...)";
+
+            // NEW — apply same font for both text areas
+            var monofont = new System.Drawing.Font("Consolas", 10);
+            txtSqlUp.Font = monofont;
+            txtSqlDown.Font = monofont;
+
+            // NEW — default UP/DOWN content
+            txtSqlUp.Text =
+        @"-- Write UP migration here
+-- Example: CREATE TABLE {schema}.new_table (...);";
+
+            txtSqlDown.Text =
+        @"-- Write DOWN migration here
+-- Example: DROP TABLE {schema}.new_table;";
         }
 
         // Load template files into combo
@@ -252,7 +267,9 @@ END $$;
 
             var template = GetSqlTemplateByType(comboType.SelectedItem?.ToString() ?? "CUSTOM", target);
             template = template.Replace("{schema}", target);
-            txtSql.Text = template;
+
+            txtSqlUp.Text = template;
+            txtSqlDown.Text = "-- Write DOWN migration here\n-- Inverse of UP script";
         }
 
         private void btnPreview_Click(object sender, EventArgs e)
@@ -271,68 +288,34 @@ END $$;
                 return;
             }
 
-            string fileName = GetMigrationFileName(migrationName, targetSchema);
+            string baseName = GetMigrationFileName(migrationName, targetSchema)
+                .Replace(".sql", "");
+
+            string fileUp = baseName + "_UP.sql";
+            string fileDown = baseName + "_DOWN.sql";
+
             string author = txtAuthor.Text.Trim();
             string comment = txtComment.Text.Trim();
-            string sql = txtSql.Text.Trim();
 
-            // Build preview content (matches PowerShell preview structure)
+            string sqlUp = txtSqlUp.Text.Trim();
+            string sqlDown = txtSqlDown.Text.Trim();
+
             var sb = new StringBuilder();
             sb.AppendLine("=============================================");
-            sb.AppendLine("MIGRATION PREVIEW");
+            sb.AppendLine("         MIGRATION PREVIEW (UP/DOWN)");
             sb.AppendLine("=============================================");
-            sb.AppendLine($"File Name: {fileName}");
-            sb.AppendLine($"Target Schema: {targetSchema}");
+            sb.AppendLine($"UP File:   {fileUp}");
+            sb.AppendLine($"DOWN File: {fileDown}");
+            sb.AppendLine($"Schema: {targetSchema}");
             sb.AppendLine($"Author: {author}");
             sb.AppendLine($"Comment: {comment}");
-            sb.AppendLine($"Type: {comboType.SelectedItem}");
             sb.AppendLine("=============================================");
-            sb.AppendLine("FILE CONTENT:");
-            sb.AppendLine("=============================================");
-            sb.AppendLine();
-            sb.AppendLine($"-- {fileName}");
-            sb.AppendLine($"-- Schema: {targetSchema}");
-            sb.AppendLine($"-- Author: {author}");
-            sb.AppendLine($"-- Date: {DateTime.Now:dd.MM.yyyy HH:mm:ss}");
-            sb.AppendLine($"-- Type: {comboType.SelectedItem}");
-            sb.AppendLine();
-            sb.AppendLine("DO $$");
-            sb.AppendLine("DECLARE");
-            sb.AppendLine("    start_time TIMESTAMP;");
-            sb.AppendLine($"    migration_id TEXT := '{fileName.Replace(".sql", string.Empty)}';");
-            sb.AppendLine($"    migration_desc TEXT := '{EscapeForSqlLiteral(comment)}';");
-            sb.AppendLine($"    target_schema TEXT := '{EscapeForSqlLiteral(targetSchema)}';");
-            sb.AppendLine("BEGIN");
-            sb.AppendLine("    start_time := clock_timestamp();");
-            sb.AppendLine("    RAISE NOTICE 'Applying migration % to schema: %', migration_id, target_schema;");
-            sb.AppendLine();
-            sb.AppendLine("    -- === SQL MIGRATION CODE ===");
-            sb.AppendLine();
-            sb.AppendLine(sql);
-            sb.AppendLine();
-            sb.AppendLine("    -- === END SQL CODE ===");
-            sb.AppendLine();
-            sb.AppendLine("    INSERT INTO migrations.db_migrations (");
-            sb.AppendLine("        migration_name,");
-            sb.AppendLine("        schema_name,");
-            sb.AppendLine("        notes,");
-            sb.AppendLine("        execution_time_ms");
-            sb.AppendLine("    ) VALUES (");
-            sb.AppendLine("        migration_id,");
-            sb.AppendLine("        target_schema,");
-            sb.AppendLine("        migration_desc,");
-            sb.AppendLine("        EXTRACT(EPOCH FROM (clock_timestamp() - start_time)) * 1000");
-            sb.AppendLine("    );");
-            sb.AppendLine();
-            sb.AppendLine("    RAISE NOTICE 'Migration % for schema % completed successfully', migration_id, target_schema;");
-            sb.AppendLine();
-            sb.AppendLine("EXCEPTION");
-            sb.AppendLine("    WHEN others THEN");
-            sb.AppendLine("        RAISE EXCEPTION 'Error in migration % for schema %: %', migration_id, target_schema, SQLERRM;");
-            sb.AppendLine("END $$;");
-            sb.AppendLine("=============================================");
-            sb.AppendLine($"File will be saved to: {Path.Combine(PendingPath, fileName)}");
-            sb.AppendLine("=============================================");
+
+            sb.AppendLine("\n========== UP SQL ==========\n");
+            sb.AppendLine(sqlUp);
+
+            sb.AppendLine("\n========== DOWN SQL ==========\n");
+            sb.AppendLine(sqlDown);
 
             using (var preview = new FormPreview(sb.ToString()))
             {
@@ -362,105 +345,60 @@ END $$;
                 return;
             }
 
-            string fileName = GetMigrationFileName(migrationName, targetSchema);
-            string filePath = Path.Combine(PendingPath, fileName);
+            string baseName = GetMigrationFileName(migrationName, targetSchema)
+                .Replace(".sql", "");
+
+            string upFile = Path.Combine(PendingPath, baseName + "_UP.sql");
+            string downFile = Path.Combine(PendingPath, baseName + "_DOWN.sql");
 
             string author = txtAuthor.Text.Trim();
-            if (string.IsNullOrWhiteSpace(author)) author = CurrentUser;
-
             string comment = txtComment.Text.Trim();
-            if (string.IsNullOrWhiteSpace(comment)) comment = $"Migration: {migrationName} for schema: {targetSchema}";
 
-            string sqlCode = txtSql.Text.Trim();
-            if (string.IsNullOrWhiteSpace(sqlCode))
+            string sqlUp = txtSqlUp.Text.Trim();
+            string sqlDown = txtSqlDown.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(sqlUp))
             {
-                var res = MessageBox.Show("SQL code is empty. Create migration without SQL code?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (res == DialogResult.No) return;
+                MessageBox.Show("UP SQL is empty!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
 
-            // Build migration content (same structure as preview)
-            var sb = new StringBuilder();
-            sb.AppendLine($"-- {fileName}");
-            sb.AppendLine($"-- Schema: {targetSchema}");
-            sb.AppendLine($"-- Author: {author}");
-            sb.AppendLine($"-- Date: {DateTime.Now:dd.MM.yyyy HH:mm:ss}");
-            sb.AppendLine($"-- Type: {comboType.SelectedItem}");
-            sb.AppendLine();
-            sb.AppendLine("DO $$");
-            sb.AppendLine("DECLARE");
-            sb.AppendLine("    start_time TIMESTAMP;");
-            sb.AppendLine($"    migration_id TEXT := '{fileName.Replace(".sql", string.Empty)}';");
-            sb.AppendLine($"    migration_desc TEXT := '{EscapeForSqlLiteral(comment)}';");
-            sb.AppendLine($"    target_schema TEXT := '{EscapeForSqlLiteral(targetSchema)}';");
-            sb.AppendLine("BEGIN");
-            sb.AppendLine("    start_time := clock_timestamp();");
-            sb.AppendLine("    RAISE NOTICE 'Applying migration % to schema: %', migration_id, target_schema;");
-            sb.AppendLine();
-            sb.AppendLine("    -- === SQL MIGRATION CODE ===");
-            sb.AppendLine();
-            sb.AppendLine(sqlCode);
-            sb.AppendLine();
-            sb.AppendLine("    -- === END SQL CODE ===");
-            sb.AppendLine();
-            sb.AppendLine("    INSERT INTO migrations.db_migrations (");
-            sb.AppendLine("        migration_name,");
-            sb.AppendLine("        schema_name,");
-            sb.AppendLine("        notes,");
-            sb.AppendLine("        execution_time_ms");
-            sb.AppendLine("    ) VALUES (");
-            sb.AppendLine("        migration_id,");
-            sb.AppendLine("        target_schema,");
-            sb.AppendLine("        migration_desc,");
-            sb.AppendLine("        EXTRACT(EPOCH FROM (clock_timestamp() - start_time)) * 1000");
-            sb.AppendLine("    );");
-            sb.AppendLine();
-            sb.AppendLine("    RAISE NOTICE 'Migration % for schema % completed successfully', migration_id, target_schema;");
-            sb.AppendLine();
-            sb.AppendLine("EXCEPTION");
-            sb.AppendLine("    WHEN others THEN");
-            sb.AppendLine("        RAISE EXCEPTION 'Error in migration % for schema %: %', migration_id, target_schema, SQLERRM;");
-            sb.AppendLine("END $$;");
+            if (string.IsNullOrWhiteSpace(sqlDown))
+            {
+                var r = MessageBox.Show(
+                    "DOWN script is empty. Continue?",
+                    "Warning",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (r == DialogResult.No) return;
+            }
 
             try
             {
-                File.WriteAllText(filePath, sb.ToString(), Encoding.UTF8);
+                File.WriteAllText(upFile, sqlUp, Encoding.UTF8);
+                File.WriteAllText(downFile, sqlDown, Encoding.UTF8);
 
-                // Save schema config if not exists
-                string schemaConfigPath = Path.Combine(SchemasPath, $"{GetSafeName(targetSchema)}.txt");
-                if (!File.Exists(schemaConfigPath))
-                {
-                    var cfgSb = new StringBuilder();
-                    cfgSb.AppendLine($"Schema: {targetSchema}");
-                    cfgSb.AppendLine($"Created: {DateTime.Now:yyyy-MM-dd}");
-                    cfgSb.AppendLine($"Description: Database schema for {targetSchema}");
-                    File.WriteAllText(schemaConfigPath, cfgSb.ToString(), Encoding.UTF8);
-                }
+                MessageBox.Show(
+                    $"Migration created!\n\nUP: {upFile}\nDOWN: {downFile}",
+                    "Success",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
 
-                MessageBox.Show($"Migration created successfully!\n\nFile: {fileName}\nSchema: {targetSchema}\nFolder: {PendingPath}\n\nNext steps:\n1. Ensure migrations schema exists\n2. Apply in DBeaver or psql\n3. Check migrations.db_migrations table", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                // Open folder and file in notepad
-                try
-                {
-                    Process.Start(new ProcessStartInfo("explorer.exe", $"\"{PendingPath}\"") { UseShellExecute = true });
-                    Process.Start(new ProcessStartInfo("notepad.exe", $"\"{filePath}\"") { UseShellExecute = true });
-                }
-                catch
-                {
-                    // ignore process start errors
-                }
+                Process.Start(new ProcessStartInfo("explorer.exe", $"\"{PendingPath}\"") { UseShellExecute = true });
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error saving file:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error saving files:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void btnClear_Click(object sender, EventArgs e)
         {
             txtName.Text = "";
-            txtSql.Text = @"-- Write your SQL code here
--- Use schema prefix for all objects: {schema}.table_name
--- Example: CREATE TABLE IF NOT EXISTS {schema}.table_name (...)";
+            txtSqlUp.Text = @"-- Write UP migration here";
+            txtSqlDown.Text = @"-- Write DOWN migration here";
             txtComment.Text = "Added new field for storing information";
             comboSchema.SelectedIndex = 0;
             comboType.SelectedIndex = 0;
@@ -534,7 +472,8 @@ RAISE NOTICE 'Migrations system initialized successfully!';";
                 try
                 {
                     string content = File.ReadAllText(path, Encoding.UTF8);
-                    txtSql.Text = content;
+                    txtSqlUp.Text = content;
+                    txtSqlDown.Text = "-- Write DOWN migration here";
                 }
                 catch (Exception ex)
                 {

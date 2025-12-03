@@ -27,8 +27,11 @@ namespace PostgresMigrations
         private Label section3Label;
         private ComboBox comboType;
 
-        private Label section4Label;
-        private TextBox txtSql;
+        private Label section4UpLabel;
+        private TextBox txtSqlUp;
+
+        private Label section4DownLabel;
+        private TextBox txtSqlDown;
 
         private Button btnInsertTemplate;
         private Panel buttonPanel;
@@ -66,8 +69,6 @@ namespace PostgresMigrations
             this.txtComment = new System.Windows.Forms.TextBox();
             this.section3Label = new System.Windows.Forms.Label();
             this.comboType = new System.Windows.Forms.ComboBox();
-            this.section4Label = new System.Windows.Forms.Label();
-            this.txtSql = new System.Windows.Forms.TextBox();
             this.btnInsertTemplate = new System.Windows.Forms.Button();
             this.buttonPanel = new System.Windows.Forms.Panel();
             this.btnGenerateInit = new System.Windows.Forms.Button();
@@ -77,6 +78,10 @@ namespace PostgresMigrations
             this.labelLoadTemplate = new System.Windows.Forms.Label();
             this.comboTemplates = new System.Windows.Forms.ComboBox();
             this.btnLoadTemplate = new System.Windows.Forms.Button();
+            this.section4UpLabel = new System.Windows.Forms.Label();
+            this.txtSqlUp = new System.Windows.Forms.TextBox();
+            this.section4DownLabel = new System.Windows.Forms.Label();
+            this.txtSqlDown = new System.Windows.Forms.TextBox();
             this.buttonPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -114,15 +119,15 @@ namespace PostgresMigrations
             // comboSchema
             // 
             this.comboSchema.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboSchema.Location = new System.Drawing.Point(220, 70);
+            this.comboSchema.Location = new System.Drawing.Point(200, 70);
             this.comboSchema.Name = "comboSchema";
-            this.comboSchema.Size = new System.Drawing.Size(200, 25);
+            this.comboSchema.Size = new System.Drawing.Size(178, 25);
             this.comboSchema.TabIndex = 3;
             this.comboSchema.SelectedIndexChanged += new System.EventHandler(this.comboSchema_SelectedIndexChanged);
             // 
             // labelCustomSchema
             // 
-            this.labelCustomSchema.Location = new System.Drawing.Point(445, 70);
+            this.labelCustomSchema.Location = new System.Drawing.Point(392, 70);
             this.labelCustomSchema.Name = "labelCustomSchema";
             this.labelCustomSchema.Size = new System.Drawing.Size(114, 25);
             this.labelCustomSchema.TabIndex = 4;
@@ -133,7 +138,7 @@ namespace PostgresMigrations
             // 
             this.txtCustomSchema.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCustomSchema.Location = new System.Drawing.Point(560, 69);
+            this.txtCustomSchema.Location = new System.Drawing.Point(507, 69);
             this.txtCustomSchema.Name = "txtCustomSchema";
             this.txtCustomSchema.Size = new System.Drawing.Size(150, 25);
             this.txtCustomSchema.TabIndex = 5;
@@ -233,33 +238,11 @@ namespace PostgresMigrations
             this.comboType.Size = new System.Drawing.Size(800, 25);
             this.comboType.TabIndex = 15;
             // 
-            // section4Label
-            // 
-            this.section4Label.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.section4Label.Location = new System.Drawing.Point(20, 340);
-            this.section4Label.Name = "section4Label";
-            this.section4Label.Size = new System.Drawing.Size(300, 25);
-            this.section4Label.TabIndex = 16;
-            this.section4Label.Text = "4. SQL Migration Code";
-            // 
-            // txtSql
-            // 
-            this.txtSql.AcceptsTab = true;
-            this.txtSql.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSql.Location = new System.Drawing.Point(40, 405);
-            this.txtSql.Multiline = true;
-            this.txtSql.Name = "txtSql";
-            this.txtSql.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtSql.Size = new System.Drawing.Size(910, 271);
-            this.txtSql.TabIndex = 17;
-            // 
             // btnInsertTemplate
             // 
             this.btnInsertTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnInsertTemplate.BackColor = System.Drawing.Color.LightGray;
-            this.btnInsertTemplate.Location = new System.Drawing.Point(40, 682);
+            this.btnInsertTemplate.Location = new System.Drawing.Point(40, 745);
             this.btnInsertTemplate.Name = "btnInsertTemplate";
             this.btnInsertTemplate.Size = new System.Drawing.Size(150, 30);
             this.btnInsertTemplate.TabIndex = 18;
@@ -269,12 +252,12 @@ namespace PostgresMigrations
             // 
             // buttonPanel
             // 
+            this.buttonPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.buttonPanel.Controls.Add(this.btnGenerateInit);
             this.buttonPanel.Controls.Add(this.btnCreate);
             this.buttonPanel.Controls.Add(this.btnPreview);
             this.buttonPanel.Controls.Add(this.btnClear);
-            this.buttonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonPanel.Location = new System.Drawing.Point(0, 722);
+            this.buttonPanel.Location = new System.Drawing.Point(0, 793);
             this.buttonPanel.Name = "buttonPanel";
             this.buttonPanel.Size = new System.Drawing.Size(984, 67);
             this.buttonPanel.TabIndex = 19;
@@ -330,7 +313,8 @@ namespace PostgresMigrations
             // 
             // labelLoadTemplate
             // 
-            this.labelLoadTemplate.Location = new System.Drawing.Point(34, 367);
+            this.labelLoadTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelLoadTemplate.Location = new System.Drawing.Point(218, 746);
             this.labelLoadTemplate.Name = "labelLoadTemplate";
             this.labelLoadTemplate.Size = new System.Drawing.Size(104, 30);
             this.labelLoadTemplate.TabIndex = 0;
@@ -339,16 +323,18 @@ namespace PostgresMigrations
             // 
             // comboTemplates
             // 
+            this.comboTemplates.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.comboTemplates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboTemplates.Location = new System.Drawing.Point(144, 371);
+            this.comboTemplates.Location = new System.Drawing.Point(328, 750);
             this.comboTemplates.Name = "comboTemplates";
             this.comboTemplates.Size = new System.Drawing.Size(300, 25);
             this.comboTemplates.TabIndex = 1;
             // 
             // btnLoadTemplate
             // 
+            this.btnLoadTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLoadTemplate.BackColor = System.Drawing.Color.LightBlue;
-            this.btnLoadTemplate.Location = new System.Drawing.Point(459, 368);
+            this.btnLoadTemplate.Location = new System.Drawing.Point(643, 747);
             this.btnLoadTemplate.Name = "btnLoadTemplate";
             this.btnLoadTemplate.Size = new System.Drawing.Size(100, 30);
             this.btnLoadTemplate.TabIndex = 2;
@@ -356,19 +342,68 @@ namespace PostgresMigrations
             this.btnLoadTemplate.UseVisualStyleBackColor = false;
             this.btnLoadTemplate.Click += new System.EventHandler(this.btnLoadTemplate_Click);
             // 
+            // section4UpLabel
+            // 
+            this.section4UpLabel.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.section4UpLabel.Location = new System.Drawing.Point(20, 340);
+            this.section4UpLabel.Name = "section4UpLabel";
+            this.section4UpLabel.Size = new System.Drawing.Size(300, 25);
+            this.section4UpLabel.TabIndex = 0;
+            this.section4UpLabel.Text = "4. SQL Migration Code (UP)";
+            // 
+            // txtSqlUp
+            // 
+            this.txtSqlUp.AcceptsTab = true;
+            this.txtSqlUp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSqlUp.Font = new System.Drawing.Font("Consolas", 10F);
+            this.txtSqlUp.Location = new System.Drawing.Point(40, 368);
+            this.txtSqlUp.Multiline = true;
+            this.txtSqlUp.Name = "txtSqlUp";
+            this.txtSqlUp.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtSqlUp.Size = new System.Drawing.Size(910, 166);
+            this.txtSqlUp.TabIndex = 1;
+            // 
+            // section4DownLabel
+            // 
+            this.section4DownLabel.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.section4DownLabel.Location = new System.Drawing.Point(20, 547);
+            this.section4DownLabel.Name = "section4DownLabel";
+            this.section4DownLabel.Size = new System.Drawing.Size(300, 25);
+            this.section4DownLabel.TabIndex = 2;
+            this.section4DownLabel.Text = "5. SQL Migration Code (DOWN)";
+            // 
+            // txtSqlDown
+            // 
+            this.txtSqlDown.AcceptsTab = true;
+            this.txtSqlDown.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSqlDown.Font = new System.Drawing.Font("Consolas", 10F);
+            this.txtSqlDown.Location = new System.Drawing.Point(40, 576);
+            this.txtSqlDown.Multiline = true;
+            this.txtSqlDown.Name = "txtSqlDown";
+            this.txtSqlDown.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtSqlDown.Size = new System.Drawing.Size(910, 160);
+            this.txtSqlDown.TabIndex = 3;
+            // 
             // Form1
             // 
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(984, 789);
+            this.ClientSize = new System.Drawing.Size(984, 860);
             this.Controls.Add(this.txtCustomSchema);
+            this.Controls.Add(this.comboSchema);
+            this.Controls.Add(this.labelCustomSchema);
+            this.Controls.Add(this.section4UpLabel);
+            this.Controls.Add(this.txtSqlUp);
+            this.Controls.Add(this.section4DownLabel);
+            this.Controls.Add(this.txtSqlDown);
             this.Controls.Add(this.labelLoadTemplate);
             this.Controls.Add(this.comboTemplates);
             this.Controls.Add(this.btnLoadTemplate);
             this.Controls.Add(this.titleLabel);
             this.Controls.Add(this.separator1);
             this.Controls.Add(this.labelSchema);
-            this.Controls.Add(this.comboSchema);
-            this.Controls.Add(this.labelCustomSchema);
             this.Controls.Add(this.section2Label);
             this.Controls.Add(this.labelName);
             this.Controls.Add(this.txtName);
@@ -379,8 +414,6 @@ namespace PostgresMigrations
             this.Controls.Add(this.txtComment);
             this.Controls.Add(this.section3Label);
             this.Controls.Add(this.comboType);
-            this.Controls.Add(this.section4Label);
-            this.Controls.Add(this.txtSql);
             this.Controls.Add(this.btnInsertTemplate);
             this.Controls.Add(this.buttonPanel);
             this.Font = new System.Drawing.Font("Segoe UI", 10F);
