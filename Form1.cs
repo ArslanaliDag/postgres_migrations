@@ -13,7 +13,6 @@ namespace PostgresMigrations
         // Config paths (kept identical to PowerShell defaults)
         private readonly string MigrationsPath = @"D:\database_migrations";
         private readonly string PendingPath;
-        private readonly string TemplatesPath;
         private readonly string SchemasPath;
         private readonly string CurrentUser;
 
@@ -22,14 +21,12 @@ namespace PostgresMigrations
             InitializeComponent();
 
             PendingPath = Path.Combine(MigrationsPath, "pending");
-            TemplatesPath = Path.Combine(MigrationsPath, "templates");
             SchemasPath = Path.Combine(MigrationsPath, "schemas");
             CurrentUser = Environment.UserName;
 
             // Ensure folders
             Directory.CreateDirectory(MigrationsPath);
             Directory.CreateDirectory(PendingPath);
-            Directory.CreateDirectory(TemplatesPath);
             Directory.CreateDirectory(SchemasPath);
 
             // Initialize UI defaults
