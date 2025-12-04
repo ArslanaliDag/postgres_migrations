@@ -303,11 +303,23 @@ namespace PostgresMigrations
 
         private string GetMigrationFileName(string name, string schema)
         {
-            string date = DateTime.Now.ToString("HHmmss_MMddyyyy");
+            string date = DateTime.Now.ToString("HHmmss_ddMMyyyy");
             string safeName = GetSafeName(name);
 
-            // Формат: yyyyMMdd_HHmmss_migrationname
+            // Формат: HHmmss_ddMMyyyy_migrationname
             return $"{date}_{safeName}";
+        }
+
+        private string GetDateFolderPath()
+        {
+            // Папка с датой в формате ДеньМесяцГод (ddMMyyyy)
+            string dateFolder = DateTime.Now.ToString("ddMMyyyy");
+            string datePath = Path.Combine(PendingPath, dateFolder);
+
+            // Создаем папку, если не существует
+            Directory.CreateDirectory(datePath);
+
+            return datePath;
         }
 
         // Template text provider similar to PowerShell Get-SQLTemplate
@@ -462,10 +474,15 @@ END $$;
                 return;
             }
 
+            // Получаем путь к папке с текущей датой
+            string dateFolderPath = GetDateFolderPath();
+
             string baseName = GetMigrationFileName(migrationName, targetSchema)
                 .Replace(".sql", "");
-            string upFile = Path.Combine(PendingPath, baseName + "_UP.sql");
-            string downFile = Path.Combine(PendingPath, baseName + "_DOWN.sql");
+
+            // Файлы сохраняем в папке с датой
+            string upFile = Path.Combine(dateFolderPath, baseName + "_UP.sql");
+            string downFile = Path.Combine(dateFolderPath, baseName + "_DOWN.sql");
 
             string author = txtAuthor.Text.Trim();
             if (string.IsNullOrWhiteSpace(author)) author = CurrentUser;
@@ -632,12 +649,16 @@ END $$;
                     File.WriteAllLines(schemaConfigPath, lines, Encoding.UTF8);
                 }
 
+                // Получаем имя папки с датой для отображения
+                string dateFolderName = Path.GetFileName(dateFolderPath);
+
                 MessageBox.Show(
                     $"Migration created successfully!\n\n" +
                     $"UP File: {Path.GetFileName(upFile)}\n" +
                     $"DOWN File: {Path.GetFileName(downFile)}\n" +
                     $"Schema: {targetSchema}\n" +
-                    $"Folder: {PendingPath}\n\n" +
+                    $"Date folder: {dateFolderName}\n" +
+                    $"Full path: {dateFolderPath}\n\n" +
                     $"Next steps:\n" +
                     $"1. Ensure migrations schema exists\n" +
                     $"2. Apply UP migration in DBeaver or psql\n" +
@@ -647,25 +668,25 @@ END $$;
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
 
-                // Open folder and UP file in notepad
+                // Open folder with date in explorer
                 try
                 {
-                    Process.Start(new ProcessStartInfo("explorer.exe", $"\"{PendingPath}\"")
+                    Process.Start(new ProcessStartInfo("explorer.exe", $"\"{dateFolderPath}\"")
                     {
                         UseShellExecute = true
                     });
 
-                    // Open only UP file (DOWN is for rollback)
-                    //Process.Start(new ProcessStartInfo("notepad.exe", $"\"{upFile}\"")
-                    //{
-                    //    UseShellExecute = true
-                    //});
+                    // Также можно открыть основную папку pending
+                    // Process.Start(new ProcessStartInfo("explorer.exe", $"\"{PendingPath}\"")
+                    // {
+                    //     UseShellExecute = true
+                    // });
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Migration created error!:\n{ex.Message}", "Error",
+                    MessageBox.Show($"Migration created but error opening folder:\n{ex.Message}", "Warning",
                         MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
+                        MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)

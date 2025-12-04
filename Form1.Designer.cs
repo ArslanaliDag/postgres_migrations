@@ -198,7 +198,7 @@ namespace PostgresMigrations
             this.tabPage2.Location = new System.Drawing.Point(4, 26);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(796, 442);
+            this.tabPage2.Size = new System.Drawing.Size(976, 439);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "4. SQL Migration Code (DOWN)";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -208,7 +208,7 @@ namespace PostgresMigrations
             this.txtSqlDown.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSqlDown.Location = new System.Drawing.Point(3, 3);
             this.txtSqlDown.Name = "txtSqlDown";
-            this.txtSqlDown.Size = new System.Drawing.Size(790, 436);
+            this.txtSqlDown.Size = new System.Drawing.Size(970, 433);
             this.txtSqlDown.TabIndex = 4;
             // 
             // menuStrip1
@@ -236,14 +236,14 @@ namespace PostgresMigrations
             // 
             this.createMirgationFilesToolStripMenuItem.Name = "createMirgationFilesToolStripMenuItem";
             this.createMirgationFilesToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
-            this.createMirgationFilesToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.createMirgationFilesToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
             this.createMirgationFilesToolStripMenuItem.Text = "Create migrations files";
             this.createMirgationFilesToolStripMenuItem.Click += new System.EventHandler(this.createMirgationFilesToolStripMenuItem_Click);
             // 
             // previewToolStripMenuItem1
             // 
             this.previewToolStripMenuItem1.Name = "previewToolStripMenuItem1";
-            this.previewToolStripMenuItem1.Size = new System.Drawing.Size(234, 22);
+            this.previewToolStripMenuItem1.Size = new System.Drawing.Size(259, 22);
             this.previewToolStripMenuItem1.Text = "Preview migration";
             this.previewToolStripMenuItem1.Visible = false;
             this.previewToolStripMenuItem1.Click += new System.EventHandler(this.previewToolStripMenuItem1_Click);
@@ -251,7 +251,8 @@ namespace PostgresMigrations
             // generateSchemaInitScriptToolStripMenuItem
             // 
             this.generateSchemaInitScriptToolStripMenuItem.Name = "generateSchemaInitScriptToolStripMenuItem";
-            this.generateSchemaInitScriptToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.generateSchemaInitScriptToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.D)));
+            this.generateSchemaInitScriptToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
             this.generateSchemaInitScriptToolStripMenuItem.Text = "Generate schema init script";
             this.generateSchemaInitScriptToolStripMenuItem.Click += new System.EventHandler(this.generateSchemaInitScriptToolStripMenuItem_Click);
             // 
