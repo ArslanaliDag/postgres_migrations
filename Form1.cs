@@ -745,17 +745,6 @@ END $$;
             }
         }
 
-        private void previewToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-            txtName.Text = "";
-            txtSqlUp.Text = @"-- Write UP migration here";
-            txtSqlDown.Text = @"-- Write DOWN migration here";
-            txtComment.Text = "Added new field for storing information";
-            comboSchema.SelectedIndex = 0;
-            txtCustomSchema.Text = "";
-        }
-
         private void generateSchemaInitScriptToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string initScript = @"-- =============================================
@@ -814,6 +803,21 @@ RAISE NOTICE 'Migrations system initialized successfully!';
                 MessageBox.Show($"Error creating init script:\n{ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void clearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtName.Text = "";
+            txtSqlUp.Text = @"-- Write UP migration here";
+            txtSqlDown.Text = @"-- Write DOWN migration here";
+            txtComment.Text = "Added new field for storing information";
+            comboSchema.SelectedIndex = 0;
+            txtCustomSchema.Text = "";
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

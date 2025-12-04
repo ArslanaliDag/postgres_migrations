@@ -51,6 +51,9 @@ namespace PostgresMigrations
             this.generateSchemaInitScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.previewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -118,7 +121,7 @@ namespace PostgresMigrations
             this.txtName.Font = new System.Drawing.Font("Consolas", 10F);
             this.txtName.Location = new System.Drawing.Point(200, 120);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(400, 23);
+            this.txtName.Size = new System.Drawing.Size(457, 23);
             this.txtName.TabIndex = 8;
             // 
             // labelAuthor
@@ -136,7 +139,7 @@ namespace PostgresMigrations
             this.txtAuthor.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.txtAuthor.Location = new System.Drawing.Point(200, 160);
             this.txtAuthor.Name = "txtAuthor";
-            this.txtAuthor.Size = new System.Drawing.Size(400, 25);
+            this.txtAuthor.Size = new System.Drawing.Size(457, 25);
             this.txtAuthor.TabIndex = 11;
             // 
             // labelComment
@@ -154,7 +157,7 @@ namespace PostgresMigrations
             this.txtComment.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.txtComment.Location = new System.Drawing.Point(200, 200);
             this.txtComment.Name = "txtComment";
-            this.txtComment.Size = new System.Drawing.Size(400, 25);
+            this.txtComment.Size = new System.Drawing.Size(457, 25);
             this.txtComment.TabIndex = 13;
             // 
             // tabControl1
@@ -227,7 +230,9 @@ namespace PostgresMigrations
             this.createMigrationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.createMirgationFilesToolStripMenuItem,
             this.previewToolStripMenuItem1,
-            this.generateSchemaInitScriptToolStripMenuItem});
+            this.generateSchemaInitScriptToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.exitToolStripMenuItem});
             this.createMigrationToolStripMenuItem.Name = "createMigrationToolStripMenuItem";
             this.createMigrationToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.createMigrationToolStripMenuItem.Text = "File";
@@ -258,10 +263,11 @@ namespace PostgresMigrations
             // 
             // previewToolStripMenuItem
             // 
+            this.previewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.clearToolStripMenuItem});
             this.previewToolStripMenuItem.Name = "previewToolStripMenuItem";
-            this.previewToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
-            this.previewToolStripMenuItem.Text = "Clear";
-            this.previewToolStripMenuItem.Click += new System.EventHandler(this.previewToolStripMenuItem_Click);
+            this.previewToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.previewToolStripMenuItem.Text = "Edit";
             // 
             // statusStrip1
             // 
@@ -270,6 +276,26 @@ namespace PostgresMigrations
             this.statusStrip1.Size = new System.Drawing.Size(984, 22);
             this.statusStrip1.TabIndex = 22;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // clearToolStripMenuItem
+            // 
+            this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
+            this.clearToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.C)));
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearToolStripMenuItem.Text = "Clear";
+            this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(256, 6);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -317,5 +343,8 @@ namespace PostgresMigrations
         private ToolStripMenuItem generateSchemaInitScriptToolStripMenuItem;
         private ToolStripMenuItem previewToolStripMenuItem;
         private StatusStrip statusStrip1;
+        private ToolStripMenuItem clearToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem exitToolStripMenuItem;
     }
 }
