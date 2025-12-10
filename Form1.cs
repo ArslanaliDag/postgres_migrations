@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using ScintillaNET;
 
@@ -30,23 +33,15 @@ namespace PostgresMigrations
             Directory.CreateDirectory(SchemasPath);
 
             // Initialize UI defaults
-            comboSchema.Items.AddRange(new object[] { "policyregistry", "users_schema", "public", "custom" });
             comboSchema.SelectedIndex = 0;
+            comboType.SelectedIndex = 0;
 
             txtAuthor.Text = CurrentUser;
             txtName.Text = "add_new_column";
-            txtComment.Text = "Added new field for storing information";
 
             // Configure Scintilla for SQL syntax highlighting
             ConfigureScintillaEditor(txtSqlUp);
             ConfigureScintillaEditor(txtSqlDown);
-
-            // Set default SQL content
-            txtSqlUp.Text = @"-- Write UP migration here
--- Example: CREATE TABLE {schema}.new_table (...);";
-
-            txtSqlDown.Text = @"-- Write DOWN migration here
--- Example: DROP TABLE {schema}.new_table;";
         }
 
         private void ConfigureScintillaEditor(Scintilla scintilla)
@@ -288,6 +283,12 @@ namespace PostgresMigrations
             return sel;
         }
 
+        private string GetMigrationType()
+        {
+            var sel = comboType.SelectedItem?.ToString();
+            return sel;
+        }
+
         private string GetSafeName(string name)
         {
             var sb = new StringBuilder();
@@ -474,6 +475,14 @@ END $$;
                 return;
             }
 
+            string migrationType = GetMigrationType();
+            if (string.IsNullOrWhiteSpace(migrationType))
+            {
+                MessageBox.Show("Please select migration type!", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             // Получаем путь к папке с текущей датой
             string dateFolderPath = GetDateFolderPath();
 
@@ -516,6 +525,7 @@ END $$;
                 var sbUp = new StringBuilder();
                 sbUp.AppendLine($"-- {baseName}_UP.sql");
                 sbUp.AppendLine($"-- Schema: {targetSchema}");
+                sbUp.AppendLine($"-- Type: {migrationType}");
                 sbUp.AppendLine($"-- Author: {author}");
                 sbUp.AppendLine($"-- Date: {DateTime.Now:dd.MM.yyyy HH:mm:ss}");
                 sbUp.AppendLine($"-- Description: {comment}");
@@ -526,6 +536,7 @@ END $$;
                 sbUp.AppendLine($"    migration_id TEXT := '{baseName}_UP';");
                 sbUp.AppendLine($"    migration_desc TEXT := '{EscapeForSqlLiteral(comment)}';");
                 sbUp.AppendLine($"    target_schema TEXT := '{EscapeForSqlLiteral(targetSchema)}';");
+                sbUp.AppendLine($"    target_migration_type TEXT := '{EscapeForSqlLiteral(migrationType)}';");
                 sbUp.AppendLine("BEGIN");
                 sbUp.AppendLine("    start_time := clock_timestamp();");
                 sbUp.AppendLine("    RAISE NOTICE 'Applying UP migration % to schema: %', migration_id, target_schema;");
@@ -540,12 +551,14 @@ END $$;
                 sbUp.AppendLine("        migration_name,");
                 sbUp.AppendLine("        schema_name,");
                 sbUp.AppendLine("        notes,");
-                sbUp.AppendLine("        execution_time_ms");
+                sbUp.AppendLine("        execution_time_ms,");
+                sbUp.AppendLine("        migration_type");
                 sbUp.AppendLine("    ) VALUES (");
                 sbUp.AppendLine("        migration_id,");
                 sbUp.AppendLine("        target_schema,");
                 sbUp.AppendLine("        migration_desc || ' (UP)',");
-                sbUp.AppendLine("        EXTRACT(EPOCH FROM (clock_timestamp() - start_time)) * 1000");
+                sbUp.AppendLine("        EXTRACT(EPOCH FROM (clock_timestamp() - start_time)) * 1000,");
+                sbUp.AppendLine("        target_migration_type");
                 sbUp.AppendLine("    );");
                 sbUp.AppendLine();
                 sbUp.AppendLine("    RAISE NOTICE 'UP migration % for schema % completed successfully', migration_id, target_schema;");
@@ -559,6 +572,7 @@ END $$;
                 var sbDown = new StringBuilder();
                 sbDown.AppendLine($"-- {baseName}_DOWN.sql");
                 sbDown.AppendLine($"-- Schema: {targetSchema}");
+                sbDown.AppendLine($"-- Type: {migrationType}");
                 sbDown.AppendLine($"-- Author: {author}");
                 sbDown.AppendLine($"-- Date: {DateTime.Now:dd.MM.yyyy HH:mm:ss}");
                 sbDown.AppendLine($"-- Description: {comment} (ROLLBACK)");
@@ -569,6 +583,7 @@ END $$;
                 sbDown.AppendLine($"    migration_id TEXT := '{baseName}_DOWN';");
                 sbDown.AppendLine($"    migration_desc TEXT := '{EscapeForSqlLiteral(comment)}';");
                 sbDown.AppendLine($"    target_schema TEXT := '{EscapeForSqlLiteral(targetSchema)}';");
+                sbDown.AppendLine($"    target_migration_type TEXT := '{EscapeForSqlLiteral(migrationType)}';");
                 sbDown.AppendLine("BEGIN");
                 sbDown.AppendLine("    start_time := clock_timestamp();");
                 sbDown.AppendLine("    RAISE NOTICE 'Applying DOWN migration (rollback) % to schema: %', migration_id, target_schema;");
@@ -585,13 +600,13 @@ END $$;
                 sbDown.AppendLine("        schema_name,");
                 sbDown.AppendLine("        notes,");
                 sbDown.AppendLine("        execution_time_ms,");
-                sbDown.AppendLine("        success");
+                sbDown.AppendLine("        migration_type");
                 sbDown.AppendLine("    ) VALUES (");
                 sbDown.AppendLine("        migration_id,");
                 sbDown.AppendLine("        target_schema,");
                 sbDown.AppendLine("        migration_desc || ' (DOWN/ROLLBACK applied)',");
                 sbDown.AppendLine("        EXTRACT(EPOCH FROM (clock_timestamp() - start_time)) * 1000,");
-                sbDown.AppendLine("        true"); // Можете установить false если хотите отметить как неудачную операцию
+                sbDown.AppendLine("        target_migration_type");
                 sbDown.AppendLine("    );");
                 sbDown.AppendLine();
                 sbDown.AppendLine("    RAISE NOTICE 'DOWN migration (rollback) % for schema % completed', migration_id, target_schema;");
@@ -696,55 +711,6 @@ END $$;
             }
         }
 
-        private void previewToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            string migrationName = txtName.Text.Trim();
-            if (string.IsNullOrWhiteSpace(migrationName))
-            {
-                MessageBox.Show("Please enter migration name!", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            string targetSchema = GetTargetSchema();
-            if (string.IsNullOrWhiteSpace(targetSchema))
-            {
-                MessageBox.Show("Please select or enter a schema!", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            string baseName = GetMigrationFileName(migrationName, targetSchema)
-                .Replace(".sql", "");
-            string fileUp = baseName + "_UP.sql";
-            string fileDown = baseName + "_DOWN.sql";
-
-            string author = txtAuthor.Text.Trim();
-            string comment = txtComment.Text.Trim();
-            string sqlUp = txtSqlUp.Text;
-            string sqlDown = txtSqlDown.Text;
-
-            var sb = new StringBuilder();
-            sb.AppendLine("=============================================");
-            sb.AppendLine(" MIGRATION PREVIEW (UP/DOWN)");
-            sb.AppendLine("=============================================");
-            sb.AppendLine($"UP File: {fileUp}");
-            sb.AppendLine($"DOWN File: {fileDown}");
-            sb.AppendLine($"Schema: {targetSchema}");
-            sb.AppendLine($"Author: {author}");
-            sb.AppendLine($"Comment: {comment}");
-            sb.AppendLine("=============================================");
-            sb.AppendLine("\n========== UP SQL ==========\n");
-            sb.AppendLine(sqlUp);
-            sb.AppendLine("\n========== DOWN SQL ==========\n");
-            sb.AppendLine(sqlDown);
-
-            using (var preview = new FormPreview(sb.ToString()))
-            {
-                preview.ShowDialog(this);
-            }
-        }
-
         private void generateSchemaInitScriptToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string initScript = @"-- =============================================
@@ -758,12 +724,10 @@ CREATE SCHEMA IF NOT EXISTS migrations;
 CREATE TABLE IF NOT EXISTS migrations.db_migrations (
     id SERIAL PRIMARY KEY,
     migration_name VARCHAR(255) NOT NULL,
-    schema_name VARCHAR(50) NOT NULL,
+    schema_name VARCHAR(100),
     applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     applied_by VARCHAR(100) DEFAULT CURRENT_USER,
     execution_time_ms INTEGER,
-    checksum VARCHAR(64),
-    success BOOLEAN DEFAULT TRUE,
     notes TEXT,
     -- Unique constraint for migration name and schema
     CONSTRAINT unique_migration_schema UNIQUE (migration_name, schema_name)
@@ -808,9 +772,9 @@ RAISE NOTICE 'Migrations system initialized successfully!';
         private void clearToolStripMenuItem_Click(object sender, EventArgs e)
         {
             txtName.Text = "";
-            txtSqlUp.Text = @"-- Write UP migration here";
-            txtSqlDown.Text = @"-- Write DOWN migration here";
-            txtComment.Text = "Added new field for storing information";
+            txtSqlUp.Text = "";
+            txtSqlDown.Text = "";
+            txtComment.Text = "";
             comboSchema.SelectedIndex = 0;
             txtCustomSchema.Text = "";
         }
@@ -819,5 +783,196 @@ RAISE NOTICE 'Migrations system initialized successfully!';
         {
             Application.Exit();
         }
+
+        private void txtSqlUp_TextChanged(object sender, EventArgs e)
+        {
+            AutoDetectSqlType();
+        }
+
+        private void AutoDetectSqlType()
+        {
+            string sqlText = txtSqlUp.Text.Trim();
+
+            if (string.IsNullOrEmpty(sqlText))
+            {
+                comboType.SelectedIndex = -1;
+                return;
+            }
+
+            // Удаляем комментарии для более точного определения
+            string cleanSql = RemoveComments(sqlText);
+
+            // Ищем первое ключевое слово (игнорируем DROP, ALTER, CREATE и т.д.)
+            string firstLine = GetFirstNonEmptyLine(cleanSql);
+
+            if (string.IsNullOrEmpty(firstLine))
+                return;
+
+            // Проверяем ключевые слова для каждого типа
+            if (IsFunction(firstLine, cleanSql))
+            {
+                SetComboType("function");
+            }
+            else if (IsTable(firstLine, cleanSql))
+            {
+                SetComboType("table");
+            }
+            else if (IsIndex(firstLine, cleanSql))
+            {
+                SetComboType("index");
+            }
+            else if (IsView(firstLine, cleanSql))
+            {
+                SetComboType("view");
+            }
+            else if (IsTrigger(firstLine, cleanSql))
+            {
+                SetComboType("trigger");
+            }
+            else
+            {
+                SetComboType("custom");
+            }
+        }
+
+        private string RemoveComments(string sql)
+        {
+            // Удаляем однострочные комментарии
+            sql = Regex.Replace(sql, @"--.*$", "", RegexOptions.Multiline);
+
+            // Удаляем многострочные комментарии /* */
+            sql = Regex.Replace(sql, @"/\*.*?\*/", "", RegexOptions.Singleline);
+
+            return sql;
+        }
+
+        private string GetFirstNonEmptyLine(string text)
+        {
+            using (var reader = new System.IO.StringReader(text))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    line = line.Trim();
+                    if (!string.IsNullOrEmpty(line) &&
+                        !line.StartsWith("--") &&
+                        !line.StartsWith("/*"))
+                    {
+                        return line.ToUpper();
+                    }
+                }
+            }
+            return string.Empty;
+        }
+
+        private bool IsFunction(string firstLine, string fullSql)
+        {
+            // Проверяем ключевые слова для функции
+            bool isCreateFunction = firstLine.Contains("CREATE FUNCTION") ||
+                                   (firstLine.Contains("CREATE") && firstLine.Contains("FUNCTION")) ||
+                                   firstLine.Contains("CREATE OR REPLACE FUNCTION");
+
+            bool isAlterFunction = firstLine.Contains("ALTER FUNCTION");
+            bool isDropFunction = firstLine.Contains("DROP FUNCTION");
+
+            // Также проверяем наличие специфичных для функции ключевых слов
+            bool hasFunctionKeywords = fullSql.ToUpper().Contains("RETURNS") ||
+                                      fullSql.ToUpper().Contains("LANGUAGE") ||
+                                      fullSql.ToUpper().Contains("AS $$") ||
+                                      fullSql.ToUpper().Contains("$FUNCTION$") ||
+                                      fullSql.ToUpper().Contains("RETURN ");
+
+            return isCreateFunction || isAlterFunction || isDropFunction || hasFunctionKeywords;
+        }
+
+        private bool IsTable(string firstLine, string fullSql)
+        {
+            bool isCreateTable = firstLine.Contains("CREATE TABLE") ||
+                                (firstLine.Contains("CREATE") && firstLine.Contains("TABLE"));
+
+            bool isAlterTable = firstLine.Contains("ALTER TABLE");
+            bool isDropTable = firstLine.Contains("DROP TABLE");
+
+            // Проверяем наличие специфичных для таблицы ключевых слов
+            bool hasTableKeywords = fullSql.ToUpper().Contains("PRIMARY KEY") ||
+                                   fullSql.ToUpper().Contains("FOREIGN KEY") ||
+                                   fullSql.ToUpper().Contains("CONSTRAINT") ||
+                                   fullSql.ToUpper().Contains("CREATE TABLE");
+
+            return isCreateTable || isAlterTable || isDropTable || hasTableKeywords;
+        }
+
+        private bool IsIndex(string firstLine, string fullSql)
+        {
+            bool isCreateIndex = firstLine.Contains("CREATE INDEX") ||
+                                (firstLine.Contains("CREATE") && firstLine.Contains("INDEX"));
+
+            bool isAlterIndex = firstLine.Contains("ALTER INDEX");
+            bool isDropIndex = firstLine.Contains("DROP INDEX");
+
+            bool hasIndexKeywords = fullSql.ToUpper().Contains("ON ") ||
+                                   fullSql.ToUpper().Contains("USING ") ||
+                                   fullSql.ToUpper().Contains("CREATE INDEX");
+
+            return isCreateIndex || isAlterIndex || isDropIndex || hasIndexKeywords;
+        }
+
+        private bool IsView(string firstLine, string fullSql)
+        {
+            bool isCreateView = firstLine.Contains("CREATE VIEW") ||
+                               (firstLine.Contains("CREATE") && firstLine.Contains("VIEW")) ||
+                               firstLine.Contains("CREATE OR REPLACE VIEW");
+
+            bool isAlterView = firstLine.Contains("ALTER VIEW");
+            bool isDropView = firstLine.Contains("DROP VIEW");
+
+            bool hasViewKeywords = fullSql.ToUpper().Contains("AS SELECT") ||
+                                  fullSql.ToUpper().Contains("CREATE VIEW");
+
+            return isCreateView || isAlterView || isDropView || hasViewKeywords;
+        }
+
+        private bool IsTrigger(string firstLine, string fullSql)
+        {
+            bool isCreateTrigger = firstLine.Contains("CREATE TRIGGER") ||
+                                  (firstLine.Contains("CREATE") && firstLine.Contains("TRIGGER"));
+
+            bool isAlterTrigger = firstLine.Contains("ALTER TRIGGER");
+            bool isDropTrigger = firstLine.Contains("DROP TRIGGER");
+
+            bool hasTriggerKeywords = fullSql.ToUpper().Contains("BEFORE ") ||
+                                     fullSql.ToUpper().Contains("AFTER ") ||
+                                     fullSql.ToUpper().Contains("INSTEAD OF ") ||
+                                     fullSql.ToUpper().Contains("FOR EACH ROW") ||
+                                     fullSql.ToUpper().Contains("EXECUTE FUNCTION");
+
+            return isCreateTrigger || isAlterTrigger || isDropTrigger || hasTriggerKeywords;
+        }
+
+        private void SetComboType(string type)
+        {
+            if (comboType.Items.Contains(type))
+            {
+                comboType.SelectedItem = type;
+            }
+            else
+            {
+                comboType.SelectedItem = "custom";
+            }
+        }
+
+        // Опционально: метод для ручной установки типа (если нужно переопределить автоопределение)
+        public void SetSqlTypeManually(string type)
+        {
+            SetComboType(type);
+        }
+
+        // Опционально: метод для получения текущего SQL с информацией о типе
+        public string GetSqlWithTypeInfo()
+        {
+            string type = comboType.SelectedItem?.ToString() ?? "custom";
+            return $"/* Type: {type} */\n{txtSqlUp.Text}";
+        }
+
     }
 }
